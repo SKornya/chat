@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import MyNavbar from './components/MyNavbar';
 import NotFound from './pages/NotFound';
 import Main from './pages/Main';
+import AuthComponent from './components/AuthComponent';
 
 export const AuthContext = createContext(null);
 
@@ -26,7 +27,7 @@ function App() {
         <div className='d-flex flex-column h-100'>
           <MyNavbar />
           <Routes>
-            <Route path='/' element={<Main />} />
+            <Route path='/' element={<AuthComponent><Main /></AuthComponent>} />
             <Route path='/login' element={<Login/>} />
             <Route path='/signup' element={<Signup/>} />
             <Route path='*' element={<NotFound/>} />

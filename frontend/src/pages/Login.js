@@ -2,17 +2,20 @@ import MyCard from '../components/Card/MyCard';
 import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
 import Footer from '../components/Card/CardFooter';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../App';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
   const { isAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  if (isAuth) {
-    return <Navigate to='/' />;
-  }
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   return (
     <div className='container-fluid h-100'>

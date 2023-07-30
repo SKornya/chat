@@ -1,29 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
-import _ from 'lodash';
+import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+// import _ from 'lodash';
 
-const initialState = {
-  data: [],
-};
+const messageAdapter = createEntityAdapter();
+
+// По умолчанию: { ids: [], entities: {} }
+const initialState = messageAdapter.getInitialState();
 
 export const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    addInitialMessages: (state, action) => {
-      action.payload.forEach((mes) => {
-        state.data.push(mes);
-      });
-    },
-    addMessage: (state, action) => {
-      state.data.push(action.payload);
-      // {
-      //   id: _.uniqueId(),
-      //   channelId: action.payload.channelId,
-      //   content: action.payload.content,
-      // }
-    },
+    addMessage: messageAdapter.addOne,
+    setMessages: messageAdapter.setAll,
+
+    // addInitialMessages: (state, action) => {
+    //   action.payload.forEach((mes) => {
+    //     state.data.push(mes);
+    //   });
+    // },
+    // addMessage: (state, action) => {
+    //   state.data.push(action.payload);
+    // },
   }
 });
 
-export const { addInitialMessages, addMessage } = messagesSlice.actions;
+export const { setMessages, addMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

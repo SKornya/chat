@@ -1,23 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChannel } from "../slices/channelsSlice";
 import { Button } from "react-bootstrap";
-// import { useRef } from "react";
-// import { RefContext } from "../pages/Main";
-// import { useContext } from "react";
+import { setCurrentChannelId } from "../slices/channelSlice";
 
 function Channel({ channel, inputRef }) {
   const dispatch = useDispatch();
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
-  // const inputRef = useRef();
-  // const { inputRef } = useContext(RefContext);
+  const currentId = useSelector((state) => state.channel.currentChannelId || state.channel.defaultChannelId);
 
   return (
     <li className="nav-item w-100">
       <Button
-        variant={channel.id === currentChannelId ? 'secondary' : ''}
+        variant={channel.id === currentId ? 'secondary' : ''}
         className="w-100 rounded-0 text-start"
         onClick={() => {
-          dispatch(setCurrentChannel(channel.id));
+          dispatch(setCurrentChannelId(channel.id));
           // inputRef.current.focus();
         }}
       >

@@ -2,8 +2,8 @@ import { useSelector } from "react-redux";
 import Channel from "./Channel";
 import { Button, Col } from "react-bootstrap";
 
-function Channels({ inputRef }) {
-  const channels = useSelector((state) => state.channels.data);
+function Channels() {
+  const channels = useSelector((state) => state.channels.ids.map((id) => state.channels.entities[id]));
 
   return (
     <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">

@@ -1,4 +1,4 @@
-import MyCard from '../components/MyCard';
+import MyCard from '../components/Card/MyCard';
 import logo from '../assets/signup.jpg';
 import SignupForm from '../components/SignupForm';
 

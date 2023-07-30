@@ -1,7 +1,7 @@
-import MyCard from '../components/MyCard';
+import MyCard from '../components/Card/MyCard';
 import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
-import Footer from '../components/CardFooter';
+import Footer from '../components/Card/CardFooter';
 import { useContext } from 'react';
 import { AuthContext } from '../App';
 import { Navigate } from 'react-router-dom';

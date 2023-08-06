@@ -1,12 +1,10 @@
-import { useContext, useEffect, useRef } from "react";
-import { AuthContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
 import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setMessages, addMessage } from '../slices/messagesSlice';
-import { setChannels } from "../slices/channelsSlice";
-import { setDefaultChannelId } from "../slices/channelSlice";
+import { addChannel, setChannels } from "../slices/channelsSlice";
+import { setCurrentChannelId, setDefaultChannelId } from "../slices/channelSlice";
 import { socket } from "../utils/socket";
 import Messages from "../components/Messages";
 import Channels from "../components/Channells";
@@ -35,6 +33,10 @@ function Main() {
   useEffect(() => {
     socket.on('newMessage', (data) => {
       dispatch(addMessage(data));
+    });
+    socket.on('newChannel', (data) => {
+      dispatch(addChannel(data));
+      dispatch(setCurrentChannelId(data.id));
     });
   }, []);
 

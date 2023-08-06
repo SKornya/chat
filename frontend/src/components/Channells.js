@@ -1,15 +1,24 @@
 import { useSelector } from "react-redux";
 import Channel from "./Channel";
 import { Button, Col } from "react-bootstrap";
+import { useState } from "react";
+import CreateModal from "./modals/CreateModal";
 
 function Channels() {
+
+  const [show, setShow] = useState(false);
+
   const channels = useSelector((state) => state.channels.ids.map((id) => state.channels.entities[id]));
 
   return (
     <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <Button variant="group-vertical" className="p-0 text-primary">
+        <Button
+          variant="group-vertical"
+          className="p-0 text-primary"
+          onClick={() => setShow(true)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -23,6 +32,16 @@ function Channels() {
           <span className="visually-hidden">+</span>
         </Button>
       </div>
+
+      {
+        show
+          ? <CreateModal 
+            show={show}
+            handleClose={() => setShow(false)}
+          />
+          : null
+      }
+
       <ul
         id="channels-box"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"

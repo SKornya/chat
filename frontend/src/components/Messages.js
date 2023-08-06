@@ -4,7 +4,7 @@ import NewMessageForm from "./NewMessageForm";
 import { Col } from "react-bootstrap";
 import { useEffect, useRef } from "react";
 
-function Messages({ inputRef }) {
+function Messages() {
   const currentChannelId = useSelector((state) => state.channel.currentChannelId || state.channel.defaultChannelId);
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
@@ -49,7 +49,6 @@ function Messages({ inputRef }) {
         <div className="mt-auto px-5 py-3">
           <NewMessageForm
             currentChannelId={channel.id}
-            inputRef={inputRef}
           />
         </div>
       </div>

@@ -2,12 +2,16 @@ import { socket } from "../utils/socket";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { Form, Button } from "react-bootstrap";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 // import { RefContext } from "../pages/Main";
 // import { useContext } from "react";
 
 function NewMessageForm({ currentChannelId }) {
-  const inputRef = useRef();
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current.focus();
+  }, [currentChannelId]);
 
   const formik = useFormik({
     initialValues: {
@@ -27,7 +31,8 @@ function NewMessageForm({ currentChannelId }) {
       });
 
       values.message = '';
-      inputRef.current.focus();
+      formik.setSubmitting(false);
+      ref.current.focus();
     },
   });
 
@@ -47,13 +52,14 @@ function NewMessageForm({ currentChannelId }) {
           placeholder="Введите сообщение..."
           value={formik.values.message}
           onChange={formik.handleChange}
-          ref={inputRef}
+          disabled={formik.isSubmitting}
+          ref={ref}
           autoFocus
         />
         <Button
           type="submit"
           variant="group-vertical"
-          disabled={!formik.values.message}
+          disabled={!formik.values.message || formik.isSubmitting}
           style={{ border: 'none' }}
         >
           <svg

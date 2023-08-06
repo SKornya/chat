@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Container, Row } from "react-bootstrap";
 import axios from 'axios';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMessages, addMessage } from '../slices/messagesSlice';
-import { addChannel, setChannels } from "../slices/channelsSlice";
+import { addChannel, setChannels, renameChannel, removeChannel} from "../slices/channelsSlice";
 import { setCurrentChannelId, setDefaultChannelId } from "../slices/channelSlice";
 import { socket } from "../utils/socket";
 import Messages from "../components/Messages";
@@ -26,9 +26,13 @@ function Main() {
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       dispatch(setDefaultChannelId(data.currentChannelId));
+      // dispatch(setCurrentChannelId(data.currentChannelId));
     };
     fetchData();
   }, []);
+
+  const defaultChannelId = useSelector((state) => state.channel.defaultChannelId);
+  const currentChannelId = useSelector((state) => state.channel.currentChannelId);
 
   useEffect(() => {
     socket.on('newMessage', (data) => {
@@ -36,8 +40,22 @@ function Main() {
     });
     socket.on('newChannel', (data) => {
       dispatch(addChannel(data));
-      dispatch(setCurrentChannelId(data.id));
     });
+    socket.on('renameChannel', (data) => {
+      dispatch(renameChannel({
+        id: data.id,
+        changes: {
+          name: data.name,
+        },
+      }));
+    });
+    socket.on('removeChannel', (data) => {
+      dispatch(removeChannel(data.id));
+      if (currentChannelId === data.id) {
+        dispatch(setCurrentChannelId(defaultChannelId));
+      }
+
+    })
   }, []);
 
   return (

@@ -1,13 +1,14 @@
 import { Modal, Button, Form, Container } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { addChannel } from "../../slices/channelsSlice";
 import { useEffect, useRef } from "react";
 import { socket } from "../../utils/socket";
+import { useSelector } from "react-redux";
+import { channels } from "../selectors/selectors";
 
 function CreateModal({ show, handleClose }) {
-  const dispatch = useDispatch();
+
+  const channelsNames = useSelector(channels).map((c) => c.name);
 
   const ref = useRef();
 
@@ -20,21 +21,19 @@ function CreateModal({ show, handleClose }) {
       name: "",
     },
     validationSchema: Yup.object({
-      name: Yup
-        .string()
-        .min(3, 'Не менее 3 символов')
-        .max(20, 'Не более 20 символов')
-        .required('Обязательное поле'),
+      name: Yup.string()
+        .min(3, "Не менее 3 символов")
+        .max(20, "Не более 20 символов")
+        .notOneOf(channelsNames, "Такой канал уже существует")
+        .required("Обязательное поле"),
     }),
     onSubmit: (values) => {
-
-      console.log(formik.errors)
-      
-      socket.emit('newChannel', {
-        name: values.name,
-      }, (err) => {
-        console.log(err);
-      });
+      socket.emit(
+        "newChannel",
+        {
+          name: values.name,
+        },
+      );
 
       handleClose();
     },
@@ -48,9 +47,7 @@ function CreateModal({ show, handleClose }) {
       <Modal.Body>
         <Form noValidate onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="name">
-            <Form.Label
-              id="name"
-            />
+            <Form.Label id="name" />
             <Form.Control
               ref={ref}
               type="text"
@@ -60,16 +57,12 @@ function CreateModal({ show, handleClose }) {
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
             />
-            <Form.Control.Feedback type="invalid" >
+            <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
           </Form.Group>
-          <Container className='d-flex justify-content-end p-0'>
-            <Button
-              variant="secondary"
-              onClick={handleClose}
-              className="me-1"
-            >
+          <Container className="d-flex justify-content-end p-0">
+            <Button variant="secondary" onClick={handleClose} className="me-1">
               Отменить
             </Button>
             <Button

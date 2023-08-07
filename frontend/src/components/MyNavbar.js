@@ -8,7 +8,8 @@ export default function MyNavbar() {
   const { isAuth, setIsAuth } = useContext(AuthContext);
 
   const logout = () => {
-    delete localStorage.authToken;
+    localStorage.setItem('username', '');
+    localStorage.setItem('token', '');
     setIsAuth(false);
   };
 

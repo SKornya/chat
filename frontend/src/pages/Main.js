@@ -18,7 +18,7 @@ function Main() {
     const fetchData = async () => {
       const response = await axios.get('/api/v1/data', {
         headers: {
-          Authorization: `Bearer ${localStorage.authToken}`,
+          Authorization: `Bearer ${localStorage.token}`,
         },
       });
       const { data } = response;

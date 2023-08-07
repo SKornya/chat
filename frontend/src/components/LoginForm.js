@@ -27,8 +27,8 @@ const LoginForm = () => {
         });
         console.log(response);
         const { token, username } = response.data;
-        localStorage.authToken = token;
-        localStorage.username = username;
+        localStorage.setItem('username', username);
+        localStorage.setItem('token', token);
         setIsAuth(true);
       } catch (e) {
         formik.errors.authError = 'Неверные имя пользователя или пароль';

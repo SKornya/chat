@@ -4,14 +4,17 @@ import { useContext, useRef } from "react";
 import { Form, FloatingLabel, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import * as Yup from 'yup';
-import { AuthContext } from "../App";
-
+import { AuthContext } from "../contexts/AuthContext";
+import { routes } from "../routes/routes";
+import { useTranslation } from "react-i18next";
 
 function SignupForm() {
 
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AuthContext);
   const ref = useRef();
+
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -21,32 +24,32 @@ function SignupForm() {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(3, 'Не менее 3 символов')
-        .max(20, 'Не более 20 символов')
-        .required('Обязательное поле'),
+        .min(3, t('errors.signup.shortUsername'))
+        .max(20, t('errors.signup.longUsername'))
+        .required(t('errors.signup.required')),
       password: Yup.string()
-        .min(6, 'Не менее 6 символов')
-        .required('Обязательное поле'),
+        .min(6, t('errors.signup.shortPassword'))
+        .required(t('errors.signup.required')),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password')], "Пароли должны совпадать")
-        .required('Обязательное поле'),
+        .oneOf([Yup.ref('password')], t('errors.signup.mismatch'))
+        .required(t('errors.signup.required')),
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/signup', {
+        const response = await axios.post(routes.signupPath, {
           username: values.username,
           password: values.password,
         });
-        console.log(response);
-        const { token, username } = response.data;
-        localStorage.setItem('username', username);
-        localStorage.setItem('token', token);
+        // console.log(response);
+        localStorage.setItem('user', JSON.stringify(response.data));
         setIsAuth(true);
         navigate('/');
       } catch (e) {
-        formik.errors.existingUser = 'Такой пользователь уже существует';
-        console.log(e);
-        ref.current.select();
+        if (e.response.status !== 409) {
+          console.log(e);
+        }
+        formik.errors.existingUser = true;
+        // ref.current.select();
       }
     },
   });
@@ -82,7 +85,7 @@ function SignupForm() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             ref={ref}
-            isInvalid={(!!formik.errors.username && !!formik.touched.username)}
+            isInvalid={((formik.touched.username && !!formik.errors.username) || formik.errors.existingUser)}
             autoFocus
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -105,7 +108,7 @@ function SignupForm() {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={(formik.touched.password && formik.errors.password)}
+            isInvalid={((formik.touched.password && !!formik.errors.password) || formik.errors.existingUser)}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -128,18 +131,18 @@ function SignupForm() {
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+            isInvalid={(formik.touched.confirmPassword && !!formik.errors.confirmPassword) || formik.errors.existingUser}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
-            {formik.errors.confirmPassword}
+            {formik.errors.confirmPassword || t('errors.signup.existingUser')}
           </Form.Control.Feedback>
         </FloatingLabel>
       </Form.Group>
 
       <Button 
         type="submit"
-        variant={formik.errors.existingUser ? "danger" : "outline-primary"}
+        variant="outline-primary"
         className="w-100"
         disabled={!(!!formik.values.username
           && !!formik.values.password
@@ -147,7 +150,7 @@ function SignupForm() {
           || formik.isSubmitting
           || formik.errors.existingUser}
       >
-        {formik.errors.existingUser ? formik.errors.existingUser : "Зарегистрироваться"}
+        {t('ui.signup.submit')}
       </Button>
     </Form>
   );

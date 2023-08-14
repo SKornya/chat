@@ -5,8 +5,11 @@ import { useEffect, useRef } from "react";
 import { socket } from "../../utils/socket";
 import { useSelector } from "react-redux";
 import { channels } from "../selectors/selectors";
+import { useTranslation } from "react-i18next";
 
-function CreateModal({ show, handleClose }) {
+function CreateModal({ hideModal }) {
+
+  const { t } = useTranslation();
 
   const channelsNames = useSelector(channels).map((c) => c.name);
 
@@ -22,10 +25,10 @@ function CreateModal({ show, handleClose }) {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .min(3, "Не менее 3 символов")
-        .max(20, "Не более 20 символов")
-        .notOneOf(channelsNames, "Такой канал уже существует")
-        .required("Обязательное поле"),
+        .min(3, t('errors.modal.shortName'))
+        .max(20, t('errors.modal.longName'))
+        .notOneOf(channelsNames, t('errors.modal.existingChannel'))
+        .required(t('errors.modal.required')),
     }),
     onSubmit: (values) => {
       socket.emit(
@@ -35,14 +38,14 @@ function CreateModal({ show, handleClose }) {
         },
       );
 
-      handleClose();
+      hideModal();
     },
   });
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show onHide={hideModal} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Создать канал</Modal.Title>
+        <Modal.Title>{t('ui.modals.create.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate onSubmit={formik.handleSubmit}>
@@ -52,7 +55,7 @@ function CreateModal({ show, handleClose }) {
               ref={ref}
               type="text"
               name="name"
-              placeholder="Название канала"
+              placeholder={t('ui.modals.create.channelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
@@ -62,15 +65,15 @@ function CreateModal({ show, handleClose }) {
             </Form.Control.Feedback>
           </Form.Group>
           <Container className="d-flex justify-content-end p-0">
-            <Button variant="secondary" onClick={handleClose} className="me-1">
-              Отменить
+            <Button variant="secondary" onClick={hideModal} className="me-1">
+              {t('ui.modals.cancel')}
             </Button>
             <Button
               type="submit"
               variant="primary"
               disabled={formik.errors.name ? true : false}
             >
-              Отправить
+              {t('ui.modals.create.submit')}
             </Button>
           </Container>
         </Form>

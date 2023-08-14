@@ -3,7 +3,7 @@ import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
 import Footer from '../components/Card/CardFooter';
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '../App';
+import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {

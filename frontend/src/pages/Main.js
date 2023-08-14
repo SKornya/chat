@@ -8,17 +8,19 @@ import { setCurrentChannelId, setDefaultChannelId } from "../slices/channelSlice
 import { socket } from "../utils/socket";
 import Messages from "../components/Messages";
 import Channels from "../components/Channells";
+import { routes } from "../routes/routes";
 
 function Main() {
-  console.log('render main');
 
   const dispatch = useDispatch();
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('/api/v1/data', {
+      const response = await axios.get(routes.initialDataPath, {
         headers: {
-          Authorization: `Bearer ${localStorage.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       });
       const { data } = response;
@@ -26,7 +28,6 @@ function Main() {
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       dispatch(setDefaultChannelId(data.currentChannelId));
-      // dispatch(setCurrentChannelId(data.currentChannelId));
     };
     fetchData();
   }, []);
@@ -61,12 +62,8 @@ function Main() {
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
       <Row className="h-100 bg-white flex-md-row">
-        <Channels
-
-        />
-        <Messages
-
-        />
+        <Channels />
+        <Messages />
       </Row>
     </Container>
   );

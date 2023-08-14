@@ -2,22 +2,41 @@ import { useSelector } from "react-redux";
 import Channel from "./Channel";
 import { Button, Col } from "react-bootstrap";
 import { useState } from "react";
-import CreateModal from "./modals/CreateModal";
+
+import { renderModal } from "./modals/index";
+import { useTranslation } from "react-i18next";
 
 function Channels() {
 
-  const [show, setShow] = useState(false);
+  const { t } = useTranslation();
 
   const channels = useSelector((state) => state.channels.ids.map((id) => state.channels.entities[id]));
 
+  const [modalInfo, setModalInfo] = useState({
+    type: null,
+    data: null,
+  });
+
+  const hideModal = () =>
+    setModalInfo({
+      type: null,
+      data: null,
+    });
+
+  const showModal = (type, data = null) =>
+    setModalInfo({
+      type,
+      data,
+    });
+
   return (
     <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
-      <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+      <Col className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
+        <b>{t('ui.chat.channels')}</b>
         <Button
           variant="group-vertical"
           className="p-0 text-primary"
-          onClick={() => setShow(true)}
+          onClick={() => showModal("create")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,16 +50,9 @@ function Channels() {
           </svg>
           <span className="visually-hidden">+</span>
         </Button>
-      </div>
+      </Col>
 
-      {
-        show
-          ? <CreateModal 
-            show={show}
-            handleClose={() => setShow(false)}
-          />
-          : null
-      }
+      {renderModal({ modalInfo, hideModal })}
 
       <ul
         id="channels-box"
@@ -51,7 +63,6 @@ function Channels() {
             <Channel
               key={channel.id}
               channel={channel}
-              // inputRef={inputRef}
             />
           );
         })}

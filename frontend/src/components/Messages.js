@@ -3,8 +3,12 @@ import Message from "./Message";
 import NewMessageForm from "./NewMessageForm";
 import { Col } from "react-bootstrap";
 import { useEffect, useRef } from "react";
+import { useTranslation } from 'react-i18next';
 
 function Messages() {
+
+  const { t } = useTranslation();
+
   const currentChannelId = useSelector((state) => state.channel.currentChannelId || state.channel.defaultChannelId);
   const messages = useSelector((state) => {
     const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
@@ -28,7 +32,7 @@ function Messages() {
           <p className="m-0">
             <b>#{channel.name}</b>
           </p>
-          <span className="text-muted">{messages.length} сообщений</span>
+          <span className="text-muted">{t('ui.chat.messages', { count: messages.length })}</span>
         </div>
         <div
           id="messages-box"

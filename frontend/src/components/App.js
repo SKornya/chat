@@ -1,19 +1,18 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import MyNavbar from './components/MyNavbar';
-import NotFound from './pages/NotFound';
-import Main from './pages/Main';
-import AuthComponent from './components/AuthComponent';
-
-export const AuthContext = createContext(null);
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
+import MyNavbar from './MyNavbar';
+import NotFound from '../pages/NotFound';
+import Main from '../pages/Main';
+import AuthComponent from './AuthComponent';
+import { AuthContext } from '../contexts/AuthContext';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('authToken')) {
+    if (localStorage.getItem('user')) {
       setIsAuth(true);
     }
   }, []);

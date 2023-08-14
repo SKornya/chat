@@ -3,9 +3,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Form, Button, FloatingLabel } from "react-bootstrap";
 import axios from "axios";
-import { AuthContext } from "../App";
+import { AuthContext } from "../contexts/AuthContext";
+import { routes } from "../routes/routes";
+import { useTranslation } from "react-i18next";
 
 const LoginForm = () => {
+
+  const { t } = useTranslation();
+
   const { setIsAuth } = useContext(AuthContext);
 
   const formik = useFormik({
@@ -15,43 +20,44 @@ const LoginForm = () => {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .required("Поля не должны быть пустыми"),
+        .required(t('errors.login.emptyFields')),
       password: Yup.string()
-        .required('Поля не должны быть пустыми'),
+        .required(t('errors.login.emptyFields')),
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('/api/v1/login', {
+        const response = await axios.post(routes.loginPath, {
           username: values.username,
           password: values.password,
         });
-        console.log(response);
-        const { token, username } = response.data;
-        localStorage.setItem('username', username);
-        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(response.data));
         setIsAuth(true);
       } catch (e) {
-        formik.errors.authError = 'Неверные имя пользователя или пароль';
+        console.log(e);
+        if (e.response.status !== 401) {
+          console.log(e);
+        }
+        formik.errors.unauthorized = true;
       }
     },
   });
 
   return (
   <Form noValidate onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
-    <h1 style={{ textAlign: "center", margin: "1em 0" }}>Войти</h1>
+    <h1 style={{ textAlign: "center", margin: "1em 0" }}>{t('ui.login.header')}</h1>
     <Form.Group controlId="username">
       <FloatingLabel
         controlId="username"
-        label="Ваш ник"
+        label={t('ui.login.username')}
         className="mb-3"
       >
         <Form.Control
           type="text"
           name="username"
-          placeholder="Ваш ник"
+          placeholder={t('ui.login.username')}
           value={formik.values.username}
           onChange={formik.handleChange}
-          isInvalid={formik.errors.authError}
+          isInvalid={formik.errors.unauthorized}
           autoFocus
         />
       </FloatingLabel>
@@ -59,20 +65,20 @@ const LoginForm = () => {
     <Form.Group mb="4" className="form-floating mb-4" controlId="password">
       <FloatingLabel
         controlId="password"
-        label="Пароль"
+        label={t('ui.login.password')}
         className="mb-3"
       >
         <Form.Control
           type="password"
           name="password"
-          placeholder="Пароль"
+          placeholder={t('ui.login.password')}
           value={formik.values.password}
           onChange={formik.handleChange}
-          isInvalid={formik.errors.authError}
+          isInvalid={formik.errors.unauthorized}
           required
         />
         <Form.Control.Feedback type="invalid" tooltip>
-          Неверные имя пользователя или пароль
+          {t('errors.login.unauthorized')}
         </Form.Control.Feedback>
       </FloatingLabel>
     </Form.Group>
@@ -82,7 +88,7 @@ const LoginForm = () => {
       className="w-100"
       disabled={!(!!formik.values.username && !!formik.values.password)}
     >
-      Войти
+      {t('ui.login.submit')}
     </Button>
   </Form>
   );

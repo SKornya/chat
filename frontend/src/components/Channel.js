@@ -2,10 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup, Dropdown, DropdownButton } from "react-bootstrap";
 import { setCurrentChannelId } from "../slices/channelSlice";
 import { useState } from "react";
-import { getModal } from "./modals";
 import { currentChannelId } from "./selectors/selectors";
+import { renderModal } from "./modals/index";
+import { useTranslation } from "react-i18next";
 
 function Channel({ channel }) {
+
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const currentId = useSelector(currentChannelId);
 
@@ -25,16 +29,6 @@ function Channel({ channel }) {
       type,
       data,
     });
-
-  const renderModal = ({ modalInfo, hideModal }) => {
-    if (!modalInfo.type) {
-      return null;
-    }
-
-    const Component = getModal(modalInfo.type);
-
-    return <Component modalInfo={modalInfo} hideModal={hideModal} />;
-  };
 
   return (
     <li className="nav-item w-100">
@@ -66,13 +60,13 @@ function Channel({ channel }) {
               eventKey="1"
               onClick={() => showModal("remove", channel)}
             >
-              Удалить
+              {t('ui.dropdown.remove')}
             </Dropdown.Item>
             <Dropdown.Item
               eventKey="2"
               onClick={() => showModal("rename", channel)}
             >
-              Переименовать
+              {t('ui.dropdown.rename')}
             </Dropdown.Item>
           </DropdownButton>
         ) : null}

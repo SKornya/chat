@@ -40,7 +40,6 @@ function SignupForm() {
           username: values.username,
           password: values.password,
         });
-        // console.log(response);
         localStorage.setItem('user', JSON.stringify(response.data));
         setIsAuth(true);
         navigate('/');

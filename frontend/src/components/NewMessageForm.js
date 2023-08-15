@@ -12,6 +12,7 @@ function NewMessageForm({ currentChannelId }) {
   const ref = useRef();
 
   useEffect(() => {
+    ref.current.value = '';
     ref.current.focus();
   }, [currentChannelId]);
 

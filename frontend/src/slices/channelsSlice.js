@@ -4,8 +4,6 @@ const channelsAdapter = createEntityAdapter();
 
 const initialState = channelsAdapter.getInitialState();
 
-console.log(initialState);
-
 export const channelsSlice = createSlice({
   name: 'channels',
   initialState,

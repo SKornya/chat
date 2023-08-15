@@ -4,14 +4,15 @@ import * as Yup from "yup";
 import { useEffect, useRef } from "react";
 import { socket } from "../../utils/socket";
 import { useSelector } from "react-redux";
-import { channels } from "../selectors/selectors";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { channelsSelector } from "../selectors/selectors";
 
 function CreateModal({ hideModal }) {
 
   const { t } = useTranslation();
 
-  const channelsNames = useSelector(channels).map((c) => c.name);
+  const channelsNames = useSelector(channelsSelector).map((c) => c.name);
 
   const ref = useRef();
 
@@ -35,10 +36,14 @@ function CreateModal({ hideModal }) {
         "newChannel",
         {
           name: values.name,
+        }, (acknowledge) => {
+          console.log(acknowledge);
         },
       );
 
       hideModal();
+
+      toast.success(t('ui.toasts.create'));
     },
   });
 

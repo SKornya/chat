@@ -55,6 +55,11 @@ const ru = {
         suggestion: 'Но вы можете перейти ',
         toMain: 'на главную страницу',
       },
+      toasts: {
+        create: 'Канал создан',
+        rename: 'Канал переименован',
+        remove: 'Канал удален',
+      },
     },
     errors: {
       login: {

@@ -1,6 +1,7 @@
 import { Modal, Button, Container } from "react-bootstrap";
 import { socket } from "../../utils/socket";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 function RemoveModal({ hideModal, modalInfo }) {
 
@@ -12,12 +13,14 @@ function RemoveModal({ hideModal, modalInfo }) {
       {
         id: channelId,
       },
-      (payload) => {
-        console.log(payload);
+      (acknowledge) => {
+        console.log(acknowledge.status);
       }
     );
 
     hideModal();
+
+    toast.error(t('ui.toasts.remove'));
   };
 
   return (

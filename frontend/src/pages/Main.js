@@ -9,6 +9,8 @@ import { socket } from "../utils/socket";
 import Messages from "../components/Messages";
 import Channels from "../components/Channells";
 import { routes } from "../routes/routes";
+import { ToastContainer } from "react-toastify";
+import { currentChannelIdSelector, defaultChannelIdSelector } from "../components/selectors/selectors";
 
 function Main() {
 
@@ -24,7 +26,7 @@ function Main() {
         },
       });
       const { data } = response;
-
+      console.log(data, data.currentChannelId);
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       dispatch(setDefaultChannelId(data.currentChannelId));
@@ -32,8 +34,8 @@ function Main() {
     fetchData();
   }, []);
 
-  const defaultChannelId = useSelector((state) => state.channel.defaultChannelId);
-  const currentChannelId = useSelector((state) => state.channel.currentChannelId);
+  const defaultChannelId = useSelector(defaultChannelIdSelector);
+  const currentChannelId = useSelector(currentChannelIdSelector);
 
   useEffect(() => {
     socket.on('newMessage', (data) => {
@@ -65,6 +67,7 @@ function Main() {
         <Channels />
         <Messages />
       </Row>
+      <ToastContainer />
     </Container>
   );
 }

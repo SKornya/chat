@@ -1,9 +1,9 @@
-const channels = state => Object.values(state.channels.entities);
+const channelsSelector = state => Object.values(state.channels.entities);
 
-const messages = state => Object.values(state.messages.entities);
+const messagesSelector = state => Object.values(state.channels.entities);
 
-const defaultChannelId = state => state.channel.defaultChannelId;
+const defaultChannelIdSelector = state => state.channel.defaultChannelId;
 
-const currentChannelId = state => state.channel.currentChannelId || state.channel.defaultChannelId;
+const currentChannelIdSelector = state => state.channel.currentChannelId;
 
-export { channels, messages, defaultChannelId, currentChannelId };
+export { channelsSelector, messagesSelector, defaultChannelIdSelector, currentChannelIdSelector };

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { socket } from "../../utils/socket";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 function RenameModal({ hideModal, modalInfo }) {
 
@@ -43,6 +44,8 @@ function RenameModal({ hideModal, modalInfo }) {
       );
 
       hideModal();
+
+      toast.warn(t('ui.toasts.rename'));
     },
   });
 

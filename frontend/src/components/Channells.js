@@ -2,15 +2,16 @@ import { useSelector } from "react-redux";
 import Channel from "./Channel";
 import { Button, Col } from "react-bootstrap";
 import { useState } from "react";
-
 import { renderModal } from "./modals/index";
 import { useTranslation } from "react-i18next";
+import { channelsSelector } from "./selectors/selectors";
 
 function Channels() {
 
   const { t } = useTranslation();
 
-  const channels = useSelector((state) => state.channels.ids.map((id) => state.channels.entities[id]));
+  const channels = useSelector(channelsSelector);
+  console.log(channels);
 
   const [modalInfo, setModalInfo] = useState({
     type: null,

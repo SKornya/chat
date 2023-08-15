@@ -4,16 +4,13 @@ import { setCurrentChannelId } from "../slices/channelSlice";
 import { useState } from "react";
 import { renderModal } from "./modals/index";
 import { useTranslation } from "react-i18next";
-import { currentChannelIdSelector } from "./selectors/selectors";
 
 function Channel({ channel }) {
 
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const currentId = useSelector(currentChannelIdSelector);
-
-  console.log(currentId);
+  const currentId = useSelector(state => state.channel.defaultChannelId || state.channel.currentChannelId);
 
   const [modalInfo, setModalInfo] = useState({
     type: null,

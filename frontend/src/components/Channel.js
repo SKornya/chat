@@ -4,13 +4,15 @@ import { setCurrentChannelId } from "../slices/channelSlice";
 import { useState } from "react";
 import { renderModal } from "./modals/index";
 import { useTranslation } from "react-i18next";
+import { initialChannelId } from './selectors/selectors';
+import filter from 'leo-profanity';
 
 function Channel({ channel }) {
 
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
-  const currentId = useSelector(state => state.channel.defaultChannelId || state.channel.currentChannelId);
+  const currentId = useSelector(initialChannelId);
 
   const [modalInfo, setModalInfo] = useState({
     type: null,
@@ -45,7 +47,7 @@ function Channel({ channel }) {
           }}
         >
           <span className="me-1">#</span>
-          {channel.name}
+          {filter.clean(channel.name)}
         </Button>
 
         {channel.removable ? (

@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { AuthContext } from "../contexts/AuthContext";
 import { routes } from "../routes/routes";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 function SignupForm() {
 
@@ -45,10 +46,9 @@ function SignupForm() {
         navigate('/');
       } catch (e) {
         if (e.response.status !== 409) {
-          console.log(e);
+          toast.error(t('errors.networkErr'));
         }
         formik.errors.existingUser = true;
-        // ref.current.select();
       }
     },
   });

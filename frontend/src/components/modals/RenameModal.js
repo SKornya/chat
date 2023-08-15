@@ -38,8 +38,10 @@ function RenameModal({ hideModal, modalInfo }) {
           id: modalInfo.data.id,
           name: values.name,
         },
-        (payload) => {
-          console.log(payload);
+        (acknowledge) => {
+          if (acknowledge.status !== 'ok') {
+            toast.error('errors.error');
+          }
         }
       );
 

@@ -7,12 +7,14 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { channelsSelector } from "../selectors/selectors";
+import filter from 'leo-profanity';
 
 function CreateModal({ hideModal }) {
 
   const { t } = useTranslation();
 
   const channelsNames = useSelector(channelsSelector).map((c) => c.name);
+  // const filteredChannelsNames = channelsNames.map((name) => filter.clean(name));
 
   const ref = useRef();
 
@@ -22,7 +24,7 @@ function CreateModal({ hideModal }) {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: '',
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -32,12 +34,15 @@ function CreateModal({ hideModal }) {
         .required(t('errors.modal.required')),
     }),
     onSubmit: (values) => {
+      ref.current.value = filter.clean(values.name);
       socket.emit(
         "newChannel",
         {
           name: values.name,
         }, (acknowledge) => {
-          console.log(acknowledge);
+          if (acknowledge.status !== 'ok') {
+            toast.error('errors.error');
+          }
         },
       );
 
@@ -53,7 +58,7 @@ function CreateModal({ hideModal }) {
         <Modal.Title>{t('ui.modals.create.header')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate onSubmit={formik.handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="name">
             <Form.Label id="name" />
             <Form.Control

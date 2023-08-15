@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 import { routes } from "../routes/routes";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
 
@@ -33,9 +34,8 @@ const LoginForm = () => {
         localStorage.setItem('user', JSON.stringify(response.data));
         setIsAuth(true);
       } catch (e) {
-        console.log(e);
         if (e.response.status !== 401) {
-          console.log(e);
+          toast.error(t('errors.networkErr'));
         }
         formik.errors.unauthorized = true;
       }

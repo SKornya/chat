@@ -14,13 +14,15 @@ function RemoveModal({ hideModal, modalInfo }) {
         id: channelId,
       },
       (acknowledge) => {
-        console.log(acknowledge.status);
+        if (acknowledge.status !== 'ok') {
+          toast.error('errors.error');
+        }
       }
     );
 
     hideModal();
 
-    toast.error(t('ui.toasts.remove'));
+    toast.warn(t('ui.toasts.remove'));
   };
 
   return (

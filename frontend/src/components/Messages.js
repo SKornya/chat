@@ -4,17 +4,15 @@ import NewMessageForm from "./NewMessageForm";
 import { Col } from "react-bootstrap";
 import { useEffect, useRef } from "react";
 import { useTranslation } from 'react-i18next';
+import { channelData, channelMessages, initialChannelId } from "./selectors/selectors";
 
 function Messages() {
 
   const { t } = useTranslation();
 
-  const currentChannelId = useSelector((state) => state.channel.currentChannelId || state.channel.defaultChannelId);
-  const messages = useSelector((state) => {
-    const allMessages = state.messages.ids.map((id) => state.messages.entities[id]);
-    return allMessages.filter((mes) => mes.channelId === currentChannelId);
-  });
-  const channel = useSelector((state) => state.channels.entities[currentChannelId]);
+  const currentChannelId = useSelector(initialChannelId);
+  const messages = useSelector(channelMessages(currentChannelId));
+  const channel = useSelector(channelData(currentChannelId));
 
   const messagesEnd = useRef();
 

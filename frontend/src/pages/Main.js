@@ -26,7 +26,6 @@ function Main() {
         },
       });
       const { data } = response;
-      console.log(data, data.currentChannelId);
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       dispatch(setDefaultChannelId(data.currentChannelId));

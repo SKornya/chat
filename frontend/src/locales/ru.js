@@ -77,10 +77,11 @@ const ru = {
       modal: {
         shortName: 'Не менее 3 символов',
         longName: 'Не более 20 символов',
-        existingChannel: 'Такой канал уже существует',
+        existingChannel: 'Должно быть уникальным',
         required: 'Обязательное поле',
       },
       networkErr: 'Ошибка сети',
+      error: 'Возникла ошибка',
     },
   },
 };

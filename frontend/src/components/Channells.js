@@ -11,7 +11,6 @@ function Channels() {
   const { t } = useTranslation();
 
   const channels = useSelector(channelsSelector);
-  console.log(channels);
 
   const [modalInfo, setModalInfo] = useState({
     type: null,

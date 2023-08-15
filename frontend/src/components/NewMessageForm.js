@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { Form, Button } from "react-bootstrap";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 function NewMessageForm({ currentChannelId }) {
 
@@ -31,8 +32,10 @@ function NewMessageForm({ currentChannelId }) {
         body: values.message,
         channelId: currentChannelId,
         user: user.username,
-      }, (status) => {
-        console.log(status);
+      }, (acknowledge) => {
+        if (acknowledge.status !== 'ok') {
+          toast.error('errors.error');
+        }
       });
 
       values.message = '';

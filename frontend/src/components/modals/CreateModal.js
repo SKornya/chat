@@ -34,12 +34,13 @@ function CreateModal({ hideModal }) {
         .required(t('errors.modal.required')),
     }),
     onSubmit: (values) => {
-      ref.current.value = filter.clean(values.name);
+      console.log(formik.isValid);
       socket.emit(
         "newChannel",
         {
-          name: values.name,
+          name: filter.clean(values.name),
         }, (acknowledge) => {
+          // console.log(acknowledge);
           if (acknowledge.status !== 'ok') {
             toast.error('errors.error');
           }
@@ -50,6 +51,8 @@ function CreateModal({ hideModal }) {
 
       toast.success(t('ui.toasts.create'));
     },
+    validateOnChange: false,
+    validateOnBlur: false,
   });
 
   return (
@@ -81,7 +84,6 @@ function CreateModal({ hideModal }) {
             <Button
               type="submit"
               variant="primary"
-              disabled={formik.errors.name ? true : false}
             >
               {t('ui.modals.create.submit')}
             </Button>

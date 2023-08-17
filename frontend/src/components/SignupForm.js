@@ -1,16 +1,15 @@
-import axios from "axios";
-import { useFormik } from "formik";
-import { useContext, useRef } from "react";
-import { Form, FloatingLabel, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { useFormik } from 'formik';
+import { useContext, useRef } from 'react';
+import { Form, FloatingLabel, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { AuthContext } from "../contexts/AuthContext";
-import { routes } from "../routes/routes";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import AuthContext from '../contexts/AuthContext';
+import routes from '../routes/routes';
 
-function SignupForm() {
-
+const SignupForm = () => {
   const navigate = useNavigate();
   const { setIsAuth } = useContext(AuthContext);
   const ref = useRef();
@@ -25,8 +24,8 @@ function SignupForm() {
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(3, t('errors.signup.shortUsername'))
-        .max(20, t('errors.signup.longUsername'))
+        .min(3, t('errors.signup.wrongLength'))
+        .max(20, t('errors.signup.wrongLength'))
         .required(t('errors.signup.required')),
       password: Yup.string()
         .min(6, t('errors.signup.shortPassword'))
@@ -51,20 +50,21 @@ function SignupForm() {
         formik.errors.existingUser = true;
       }
     },
+    validateOnChange: false,
+    validateOnBlur: false,
   });
 
   return (
     <Form
-      
-      className='col-12 col-md-6 mt-3 mt-mb-0'
+      className="col-12 col-md-6 mt-3 mt-mb-0"
       onSubmit={formik.handleSubmit}
     >
       <h1
         style={{
           textAlign: 'center',
           marginBottom: '1em',
-          whiteSpace: "nowrap",
-          overflow: "hidden",
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
         }}
       >
         Регистрация
@@ -84,7 +84,7 @@ function SignupForm() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             ref={ref}
-            isInvalid={((formik.touched.username && !!formik.errors.username) || formik.errors.existingUser)}
+            isInvalid={!!formik.errors.username || formik.errors.existingUser}
             autoFocus
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -107,7 +107,7 @@ function SignupForm() {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={((formik.touched.password && !!formik.errors.password) || formik.errors.existingUser)}
+            isInvalid={!!formik.errors.password || formik.errors.existingUser}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -130,7 +130,7 @@ function SignupForm() {
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={(formik.touched.confirmPassword && !!formik.errors.confirmPassword) || formik.errors.existingUser}
+            isInvalid={!!formik.errors.confirmPassword || formik.errors.existingUser}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -139,20 +139,16 @@ function SignupForm() {
         </FloatingLabel>
       </Form.Group>
 
-      <Button 
+      <Button
         type="submit"
         variant="outline-primary"
         className="w-100"
-        disabled={!(!!formik.values.username
-          && !!formik.values.password
-          && !!formik.values.confirmPassword)
-          || formik.isSubmitting
-          || formik.errors.existingUser}
+        disabled={formik.isSubmitting}
       >
         {t('ui.signup.submit')}
       </Button>
     </Form>
   );
-}
+};
 
 export default SignupForm;

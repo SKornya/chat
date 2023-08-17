@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { AuthContext } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import AuthContext from '../contexts/AuthContext';
 
-export default function MyNavbar() {
-
+const MyNavbar = () => {
   const { isAuth, setIsAuth } = useContext(AuthContext);
 
   const { t } = useTranslation();
@@ -16,13 +15,15 @@ export default function MyNavbar() {
   };
 
   return (
-    <Navbar expand='lg' className='shadow-sm'>
+    <Navbar expand="lg" className="shadow-sm">
       <Container>
-        <LinkContainer to='/' ><Navbar.Brand>{t('ui.navbar.brand')}</Navbar.Brand></LinkContainer>
+        <LinkContainer to="/"><Navbar.Brand>{t('ui.navbar.brand')}</Navbar.Brand></LinkContainer>
         {
           isAuth ? <Button onClick={logout}>{t('ui.navbar.logout')}</Button> : null
         }
       </Container>
     </Navbar>
-  )
+  );
 };
+
+export default MyNavbar;

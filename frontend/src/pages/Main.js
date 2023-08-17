@@ -1,19 +1,20 @@
-import { useEffect } from "react";
-import { Container, Row } from "react-bootstrap";
+import { useEffect } from 'react';
+import { Container, Row } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { setMessages, addMessage } from '../slices/messagesSlice';
-import { addChannel, setChannels, renameChannel, removeChannel} from "../slices/channelsSlice";
-import { setCurrentChannelId, setDefaultChannelId } from "../slices/channelSlice";
-import { socket } from "../utils/socket";
-import Messages from "../components/Messages";
-import Channels from "../components/Channells";
-import { routes } from "../routes/routes";
-import { ToastContainer } from "react-toastify";
-import { currentChannelIdSelector, defaultChannelIdSelector } from "../components/selectors/selectors";
+import {
+  addChannel, setChannels, renameChannel, removeChannel,
+} from '../slices/channelsSlice';
+import { setCurrentChannelId, setDefaultChannelId } from '../slices/channelSlice';
+import socket from '../utils/socket';
+import Messages from '../components/Messages';
+import Channels from '../components/Channells';
+import routes from '../routes/routes';
+import { currentChannelIdSelector, defaultChannelIdSelector } from '../components/selectors/selectors';
 
-function Main() {
-
+const Main = () => {
   const dispatch = useDispatch();
 
   const user = JSON.parse(localStorage.getItem('user'));
@@ -56,8 +57,7 @@ function Main() {
       if (currentChannelId === data.id) {
         dispatch(setCurrentChannelId(defaultChannelId));
       }
-
-    })
+    });
   }, []);
 
   return (
@@ -69,6 +69,6 @@ function Main() {
       <ToastContainer />
     </Container>
   );
-}
+};
 
 export default Main;

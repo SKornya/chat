@@ -1,6 +1,6 @@
-import CreateModal from "./CreateModal";
-import RenameModal from "./RenameModal";
-import RemoveModal from "./RemoveModal";
+import CreateModal from './CreateModal';
+import RenameModal from './RenameModal';
+import RemoveModal from './RemoveModal';
 
 const modals = {
   create: CreateModal,
@@ -9,7 +9,6 @@ const modals = {
 };
 
 export const getModal = (modalName) => modals[modalName];
-
 
 export const renderModal = ({ modalInfo, hideModal }) => {
   if (!modalInfo.type) {

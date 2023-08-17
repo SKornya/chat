@@ -1,23 +1,22 @@
-import React, { useContext } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Form, Button, FloatingLabel } from "react-bootstrap";
-import axios from "axios";
-import { AuthContext } from "../contexts/AuthContext";
-import { routes } from "../routes/routes";
-import { useTranslation } from "react-i18next";
+import React, { useContext } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Form, Button, FloatingLabel } from 'react-bootstrap';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import AuthContext from '../contexts/AuthContext';
+import routes from '../routes/routes';
 
 const LoginForm = () => {
-
   const { t } = useTranslation();
 
   const { setIsAuth } = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -43,54 +42,54 @@ const LoginForm = () => {
   });
 
   return (
-  <Form noValidate onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
-    <h1 style={{ textAlign: "center", margin: "1em 0" }}>{t('ui.login.header')}</h1>
-    <Form.Group controlId="username">
-      <FloatingLabel
-        controlId="username"
-        label={t('ui.login.username')}
-        className="mb-3"
+    <Form noValidate onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
+      <h1 style={{ textAlign: 'center', margin: '1em 0' }}>{t('ui.login.header')}</h1>
+      <Form.Group controlId="username">
+        <FloatingLabel
+          controlId="username"
+          label={t('ui.login.username')}
+          className="mb-3"
+        >
+          <Form.Control
+            type="text"
+            name="username"
+            placeholder={t('ui.login.username')}
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            isInvalid={formik.errors.unauthorized}
+            autoFocus
+          />
+        </FloatingLabel>
+      </Form.Group>
+      <Form.Group mb="4" className="form-floating mb-4" controlId="password">
+        <FloatingLabel
+          controlId="password"
+          label={t('ui.login.password')}
+          className="mb-3"
+        >
+          <Form.Control
+            type="password"
+            name="password"
+            placeholder={t('ui.login.password')}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            isInvalid={formik.errors.unauthorized}
+            required
+          />
+          <Form.Control.Feedback type="invalid" tooltip>
+            {t('errors.login.unauthorized')}
+          </Form.Control.Feedback>
+        </FloatingLabel>
+      </Form.Group>
+      <Button
+        type="submit"
+        variant="outline-primary"
+        className="w-100"
+        disabled={!(!!formik.values.username && !!formik.values.password)}
       >
-        <Form.Control
-          type="text"
-          name="username"
-          placeholder={t('ui.login.username')}
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          isInvalid={formik.errors.unauthorized}
-          autoFocus
-        />
-      </FloatingLabel>
-    </Form.Group>
-    <Form.Group mb="4" className="form-floating mb-4" controlId="password">
-      <FloatingLabel
-        controlId="password"
-        label={t('ui.login.password')}
-        className="mb-3"
-      >
-        <Form.Control
-          type="password"
-          name="password"
-          placeholder={t('ui.login.password')}
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          isInvalid={formik.errors.unauthorized}
-          required
-        />
-        <Form.Control.Feedback type="invalid" tooltip>
-          {t('errors.login.unauthorized')}
-        </Form.Control.Feedback>
-      </FloatingLabel>
-    </Form.Group>
-    <Button 
-      type="submit"
-      variant="outline-primary"
-      className="w-100"
-      disabled={!(!!formik.values.username && !!formik.values.password)}
-    >
-      {t('ui.login.submit')}
-    </Button>
-  </Form>
+        {t('ui.login.submit')}
+      </Button>
+    </Form>
   );
 };
 

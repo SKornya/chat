@@ -1,28 +1,24 @@
-import { Modal, Button, Container } from "react-bootstrap";
-import { socket } from "../../utils/socket";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import { Modal, Button, Container } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import socket from '../../utils/socket';
 
-function RemoveModal({ hideModal, modalInfo }) {
-
+const RemoveModal = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
 
   const removeChannel = (channelId) => {
-    socket.emit(
-      "removeChannel",
-      {
-        id: channelId,
-      },
-      (acknowledge) => {
-        if (acknowledge.status !== 'ok') {
-          toast.error('errors.error');
-        }
-      }
-    );
-
-    hideModal();
-
-    toast.warn(t('ui.toasts.remove'));
+    try {
+      socket.emit(
+        'removeChannel',
+        {
+          id: channelId,
+        },
+      );
+      hideModal();
+      toast.warn(t('ui.toasts.remove'));
+    } catch (e) {
+      toast.error('errors.error');
+    }
   };
 
   return (
@@ -48,6 +44,6 @@ function RemoveModal({ hideModal, modalInfo }) {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default RemoveModal;

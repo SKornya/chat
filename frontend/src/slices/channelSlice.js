@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { addChannel, removeChannel } from "./channelsSlice";
+import { createSlice } from '@reduxjs/toolkit';
+import { removeChannel } from './channelsSlice';
 
 const initialState = {
   defaultChannelId: null,
@@ -24,11 +24,11 @@ const channelSlice = createSlice({
         if (id === state.currentChannelId) {
           state.currentChannelId = null;
         }
-      })
-      .addCase(addChannel, (state, action) => {
-        const id = action.payload.id;
-        state.currentChannelId = id;
       });
+    // .addCase(addChannel, (state, action) => {
+    //   const id = action.payload.id;
+    //   state.currentChannelId = id;
+    // });
   },
 });
 

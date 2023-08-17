@@ -1,18 +1,18 @@
-import { LinkContainer } from "react-router-bootstrap";
+import { LinkContainer } from 'react-router-bootstrap';
+import { useTranslation } from 'react-i18next';
 import logo from '../assets/notFound.svg';
-import { useTranslation } from "react-i18next";
 
-function NotFound() {
-
+const NotFound = () => {
   const { t } = useTranslation();
 
   return (
     <div className="text-center">
       <img src={logo} className="img-fluid h-25" alt="not found page" />
       <h2 className="text-muted">{t('ui.notFoundPage.notFound')}</h2>
-      <p className="text-muted">{t('ui.notFoundPage.suggestion')} 
+      <p className="text-muted">
+        {t('ui.notFoundPage.suggestion')}
         <LinkContainer
-          to='/'
+          to="/"
           style={{
             cursor: 'pointer',
             textDecoration: 'underline',
@@ -24,6 +24,6 @@ function NotFound() {
       </p>
     </div>
   );
-}
+};
 
 export default NotFound;

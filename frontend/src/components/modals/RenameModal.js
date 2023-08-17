@@ -1,19 +1,19 @@
-import { Modal, Button, Form, Container } from "react-bootstrap";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useEffect, useRef } from "react";
-import { socket } from "../../utils/socket";
-import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
+import {
+  Modal, Button, Form, Container,
+} from 'react-bootstrap';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import socket from '../../utils/socket';
 
-function RenameModal({ hideModal, modalInfo }) {
-
+const RenameModal = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
 
-  const channels = useSelector((state) =>
-    Object.values(state.channels.entities)
-  ).map((c) => c.name);
+  const channels = useSelector((state) => Object.values(state.channels.entities))
+    .map((c) => c.name);
   const ref = useRef();
 
   useEffect(() => {
@@ -32,22 +32,19 @@ function RenameModal({ hideModal, modalInfo }) {
         .required(t('errors.modal.required')),
     }),
     onSubmit: (values) => {
-      socket.emit(
-        "renameChannel",
-        {
-          id: modalInfo.data.id,
-          name: values.name,
-        },
-        (acknowledge) => {
-          if (acknowledge.status !== 'ok') {
-            toast.error('errors.error');
-          }
-        }
-      );
-
-      hideModal();
-
-      toast.warn(t('ui.toasts.rename'));
+      try {
+        socket.emit(
+          'renameChannel',
+          {
+            id: modalInfo.data.id,
+            name: values.name,
+          },
+        );
+        hideModal();
+        toast.warn(t('ui.toasts.rename'));
+      } catch (e) {
+        toast.error('errors.error');
+      }
     },
   });
 
@@ -80,7 +77,7 @@ function RenameModal({ hideModal, modalInfo }) {
             <Button
               type="submit"
               variant="primary"
-              disabled={formik.errors.name ? true : false}
+              disabled={!!formik.errors.name}
             >
               {t('ui.modals.rename.submit')}
             </Button>
@@ -89,6 +86,6 @@ function RenameModal({ hideModal, modalInfo }) {
       </Modal.Body>
     </Modal>
   );
-}
+};
 
 export default RenameModal;

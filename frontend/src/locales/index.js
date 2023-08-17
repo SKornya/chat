@@ -1,8 +1,7 @@
-import ru from "./ru";
+import ru from './ru';
 
 const resources = {
   ru,
 };
 
 export default resources;
-

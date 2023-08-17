@@ -24,7 +24,7 @@ const init = () => {
 
   const rollbarConfig = {
     accessToken: 'ba87cb260c1d45c699533b6ac370c00f',
-    enviroment: 'testenv',
+    enviroment: 'production',
   };
 
   return (

@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import NewMessageForm from './NewMessageForm';
 import Message from './Message';
-import { channelData, channelMessages, initialChannelId } from './selectors/selectors';
+import { channelData, channelMessages, initialChannelId } from '../selectors/selectors';
 
 const Messages = () => {
   const { t } = useTranslation();

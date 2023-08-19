@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
-import { channelsSelector } from '../selectors/selectors';
+import { channelsSelector } from '../../selectors/selectors';
 import socket from '../../utils/socket';
 import { setCurrentChannelId } from '../../slices/channelSlice';
 

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import { setCurrentChannelId } from '../slices/channelSlice';
 import { renderModal } from './modals/index';
-import { initialChannelId } from './selectors/selectors';
+import { initialChannelId } from '../selectors/selectors';
 
 const Channel = ({ channel }) => {
   const { t } = useTranslation();

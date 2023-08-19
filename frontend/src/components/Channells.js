@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { renderModal } from './modals/index';
 import Channel from './Channel';
-import { channelsSelector } from './selectors/selectors';
+import { channelsSelector } from '../selectors/selectors';
 
 const Channels = () => {
   const { t } = useTranslation();

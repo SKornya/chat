@@ -12,7 +12,7 @@ import socket from '../utils/socket';
 import Messages from '../components/Messages';
 import Channels from '../components/Channells';
 import routes from '../routes/routes';
-import { currentChannelIdSelector, defaultChannelIdSelector } from '../components/selectors/selectors';
+import { currentChannelIdSelector, defaultChannelIdSelector } from '../selectors/selectors';
 
 const Main = () => {
   const dispatch = useDispatch();

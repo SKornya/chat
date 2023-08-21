@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { setMessages, addMessage } from '../slices/messagesSlice';
 import {
   addChannel, setChannels, renameChannel, removeChannel,
@@ -15,21 +16,27 @@ import routes from '../routes/routes';
 import { currentChannelIdSelector, defaultChannelIdSelector } from '../selectors/selectors';
 
 const Main = () => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(routes.initialDataPath, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const { data } = response;
-      dispatch(setChannels(data.channels));
-      dispatch(setMessages(data.messages));
-      dispatch(setDefaultChannelId(data.currentChannelId));
+      try {
+        const response = await axios.get(routes.initialDataPath, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const { data } = response;
+        dispatch(setChannels(data.channels));
+        dispatch(setMessages(data.messages));
+        dispatch(setDefaultChannelId(data.currentChannelId));
+      } catch (e) {
+        toast.error(t('ui.errors.networkErr'));
+      }
     };
     fetchData();
   }, []);

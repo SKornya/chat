@@ -36,7 +36,7 @@ const NewMessageForm = ({ currentChannelId }) => {
         }
       });
       setSubmitting(false);
-      values.message = '';
+      formik.values.message = '';
       ref.current.focus();
     },
   });

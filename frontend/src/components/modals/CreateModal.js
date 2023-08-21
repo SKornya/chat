@@ -66,13 +66,14 @@ const CreateModal = ({ hideModal }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label id="name" />
+          <Form.Group className="mb-3 visually-hidden" controlId="name">
+            <Form.Label id="name">
+              {t('ui.modals.create.channelName')}
+            </Form.Label>
             <Form.Control
               ref={ref}
               type="text"
               name="name"
-              placeholder={t('ui.modals.create.channelName')}
               value={formik.errors.name ? filter.clean(formik.values.name) : formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}

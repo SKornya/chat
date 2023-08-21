@@ -22,7 +22,7 @@ const ru = {
       },
       chat: {
         channels: 'Каналы',
-        channelControl: '"Управление каналом"',
+        channelControl: 'Управление каналом',
         messages_one: '{{count}} сообщение',
         messages_few: '{{count}} сообщения',
         messages_many: '{{count}} сообщений',

@@ -6,9 +6,9 @@ import socket from '../../utils/socket';
 const RemoveModal = ({ hideModal, modalInfo }) => {
   const { t } = useTranslation();
 
-  const removeChannel = (channelId) => {
+  const removeChannel = async (channelId) => {
     try {
-      socket.emit(
+      await socket.emit(
         'removeChannel',
         {
           id: channelId,

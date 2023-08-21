@@ -31,9 +31,9 @@ const RenameModal = ({ hideModal, modalInfo }) => {
         .notOneOf(channels, t('errors.modal.existingChannel'))
         .required(t('errors.modal.required')),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        socket.emit(
+        await socket.emit(
           'renameChannel',
           {
             id: modalInfo.data.id,

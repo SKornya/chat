@@ -37,9 +37,9 @@ const CreateModal = ({ hideModal }) => {
         .notOneOf(channelsNames, t('errors.modal.existingChannel'))
         .required(t('errors.modal.required')),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       try {
-        socket.emit(
+        await socket.emit(
           'newChannel',
           {
             name: values.name.trim(),

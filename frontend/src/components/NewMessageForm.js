@@ -25,19 +25,23 @@ const NewMessageForm = ({ currentChannelId }) => {
     validationSchema: Yup.object({
       message: Yup.string().required(),
     }),
-    onSubmit: (values, { setSubmitting }) => {
-      socket.emit('newMessage', {
-        body: values.message,
-        channelId: currentChannelId,
-        user: user.username,
-      }, (acknowledge) => {
-        if (acknowledge.status !== 'ok') {
-          toast.error('errors.error');
-        }
-      });
-      setSubmitting(false);
-      formik.values.message = '';
-      ref.current.focus();
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await socket.emit('newMessage', {
+          body: values.message,
+          channelId: currentChannelId,
+          user: user.username,
+        }, (acknowledge) => {
+          if (acknowledge.status !== 'ok') {
+            toast.error('errors.error');
+          }
+        });
+        setSubmitting(false);
+        formik.values.message = '';
+        ref.current.focus();
+      } catch (e) {
+        toast.error(t('errors.error'));
+      }
     },
   });
 

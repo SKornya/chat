@@ -88,7 +88,7 @@ const SignupForm = () => {
             autoFocus
           />
           <Form.Control.Feedback type="invalid" tooltip>
-            {formik.errors.username}
+            {formik.errors.username || t('errors.signup.existingUser')}
           </Form.Control.Feedback>
         </FloatingLabel>
       </Form.Group>
@@ -107,7 +107,7 @@ const SignupForm = () => {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={!!formik.errors.password || formik.errors.existingUser}
+            isInvalid={!!formik.errors.password}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
@@ -130,11 +130,11 @@ const SignupForm = () => {
             value={formik.values.confirmPassword}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={!!formik.errors.confirmPassword || formik.errors.existingUser}
+            isInvalid={!!formik.errors.confirmPassword}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>
-            {formik.errors.confirmPassword || t('errors.signup.existingUser')}
+            {formik.errors.confirmPassword}
           </Form.Control.Feedback>
         </FloatingLabel>
       </Form.Group>

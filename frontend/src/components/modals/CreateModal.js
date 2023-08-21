@@ -66,10 +66,7 @@ const CreateModal = ({ hideModal }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group className="mb-3 visually-hidden" controlId="name">
-            <Form.Label id="name">
-              {t('ui.modals.create.channelName')}
-            </Form.Label>
+          <Form.Group className="mb-3" controlId="name">
             <Form.Control
               ref={ref}
               type="text"
@@ -78,6 +75,9 @@ const CreateModal = ({ hideModal }) => {
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
             />
+            <Form.Label id="name" className="visually-hidden">
+              {t('ui.modals.create.channelName')}
+            </Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>

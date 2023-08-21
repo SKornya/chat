@@ -53,7 +53,7 @@ const Channel = ({ channel }) => {
           <DropdownButton
             as={ButtonGroup}
             variant={channel.id === currentId ? 'secondary' : ''}
-            title=""
+            title={<span className="visually-hidden">{t('ui.chat.channelControl')}</span>}
             id="dropdown"
           >
             <span className="visually-hidden">{t('ui.channels.channelControl')}</span>

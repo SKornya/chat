@@ -56,18 +56,17 @@ const RenameModal = ({ hideModal, modalInfo }) => {
       <Modal.Body>
         <Form noValidate onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="name">
-            <Form.Label id="name">
-              {t('ui.modals.rename.channelName')}
-            </Form.Label>
             <Form.Control
               ref={ref}
               type="text"
               name="name"
-              placeholder={t('ui.modals.rename.channelName')}
               value={formik.values.name}
               onChange={formik.handleChange}
               isInvalid={formik.errors.name}
             />
+            <Form.Label id="name" className="visually-hidden">
+              {t('ui.modals.rename.channelName')}
+            </Form.Label>
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>

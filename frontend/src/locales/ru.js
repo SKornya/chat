@@ -22,6 +22,7 @@ const ru = {
       },
       chat: {
         channels: 'Каналы',
+        channelControl: '"Управление каналом"',
         messages_one: '{{count}} сообщение',
         messages_few: '{{count}} сообщения',
         messages_many: '{{count}} сообщений',
@@ -35,7 +36,7 @@ const ru = {
       modals: {
         create: {
           header: 'Создать канал',
-          channelName: 'Название канала',
+          channelName: 'Имя канала',
           submit: 'Отправить',
         },
         remove: {
@@ -45,7 +46,7 @@ const ru = {
         },
         rename: {
           header: 'Переименовать канал',
-          channelName: 'Название канала',
+          channelName: 'Имя канала',
           submit: 'Отправить',
         },
         cancel: 'Отменить',

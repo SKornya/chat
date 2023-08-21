@@ -56,6 +56,7 @@ const Channel = ({ channel }) => {
             title=""
             id="dropdown"
           >
+            <span className="visually-hidden">{t('ui.channels.channelControl')}</span>
             <Dropdown.Item
               eventKey="1"
               onClick={() => showModal('remove', channel)}

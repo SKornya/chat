@@ -59,7 +59,7 @@ const ru = {
       toasts: {
         create: 'Канал создан',
         rename: 'Канал переименован',
-        remove: 'Канал удален',
+        remove: 'Канал удалён',
       },
     },
     errors: {

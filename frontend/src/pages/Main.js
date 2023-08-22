@@ -35,7 +35,7 @@ const Main = () => {
         dispatch(setMessages(data.messages));
         dispatch(setDefaultChannelId(data.currentChannelId));
       } catch (e) {
-        toast.error(t('ui.errors.networkErr'));
+        toast.error(t('errors.networkErr'));
       }
     };
     fetchData();

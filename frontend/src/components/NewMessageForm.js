@@ -1,13 +1,15 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Button } from 'react-bootstrap';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import socket from '../utils/socket';
+import SocketContext from '../contexts/SocketContext';
 
 const NewMessageForm = ({ currentChannelId }) => {
   const { t } = useTranslation();
+
+  const { chatApi } = useContext(SocketContext);
 
   const ref = useRef();
 
@@ -27,18 +29,13 @@ const NewMessageForm = ({ currentChannelId }) => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await socket.emit('newMessage', {
-          body: values.message,
-          channelId: currentChannelId,
-          user: user.username,
-        }, (acknowledge) => {
-          if (acknowledge.status !== 'ok') {
-            toast.error('errors.error');
-          }
-        });
+        const { message } = values;
+        await chatApi.newMessage(message, currentChannelId, user.username);
         setSubmitting(false);
         formik.values.message = '';
-        ref.current.focus();
+        setTimeout(() => {
+          ref.current.focus();
+        });
       } catch (e) {
         toast.error(t('errors.error'));
       }

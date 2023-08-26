@@ -2,17 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { Provider } from 'react-redux';
-import store from './store/store';
-import init from './init';
+import Init from './init';
 
-const vdom = init();
+const vdom = await Init();
 
 const root = ReactDOM.createRoot(document.getElementById('chat'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      {vdom}
-    </Provider>
+    {vdom}
   </React.StrictMode>,
 );

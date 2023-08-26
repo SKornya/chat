@@ -3,13 +3,15 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import socket from '../../utils/socket';
+import SocketContext from '../../contexts/SocketContext';
 
 const RenameModal = ({ hideModal, modalInfo }) => {
+  const { chatApi } = useContext(SocketContext);
+
   const { t } = useTranslation();
 
   const channels = useSelector((state) => Object.values(state.channels.entities))
@@ -33,13 +35,9 @@ const RenameModal = ({ hideModal, modalInfo }) => {
     }),
     onSubmit: async (values) => {
       try {
-        await socket.emit(
-          'renameChannel',
-          {
-            id: modalInfo.data.id,
-            name: values.name,
-          },
-        );
+        const { id } = modalInfo.data;
+        const { name } = values;
+        await chatApi.renameChannel(id, name);
         hideModal();
         toast.warn(t('ui.toasts.rename'));
       } catch (e) {

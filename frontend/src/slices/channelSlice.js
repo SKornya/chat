@@ -27,10 +27,6 @@ const channelSlice = createSlice({
           state.currentChannelId = null;
         }
       });
-    // .addCase(addChannel, (state, action) => {
-    //   const id = action.payload.id;
-    //   state.currentChannelId = id;
-    // });
   },
 });
 

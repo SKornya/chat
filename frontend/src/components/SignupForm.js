@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthProvider';
 import routes from '../routes/routes';
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const { setIsAuth } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const ref = useRef();
 
   const { t } = useTranslation();
@@ -40,8 +40,8 @@ const SignupForm = () => {
           username: values.username,
           password: values.password,
         });
-        localStorage.setItem('user', JSON.stringify(response.data));
-        setIsAuth(true);
+        const userData = JSON.stringify(response.data);
+        login(userData);
         navigate('/');
       } catch (e) {
         if (e.response.status !== 409) {

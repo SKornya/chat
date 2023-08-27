@@ -5,13 +5,13 @@ import { Form, Button, FloatingLabel } from 'react-bootstrap';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthProvider';
 import routes from '../routes/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
 
-  const { setIsAuth } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
@@ -30,8 +30,8 @@ const LoginForm = () => {
           username: values.username,
           password: values.password,
         });
-        localStorage.setItem('user', JSON.stringify(response.data));
-        setIsAuth(true);
+        const userData = JSON.stringify(response.data);
+        login(userData);
       } catch (e) {
         if (e.response.status !== 401) {
           toast.error(t('errors.networkErr'));

@@ -1,7 +1,11 @@
+import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthProvider';
 
 const AuthComponent = ({ children }) => {
-  if (!localStorage.getItem('user')) {
+  const { isLogged } = useContext(AuthContext);
+
+  if (!isLogged()) {
     return <Navigate to="/login" />;
   }
 

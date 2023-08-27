@@ -4,17 +4,17 @@ import MyCard from '../components/Card/MyCard';
 import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
 import Footer from '../components/Card/CardFooter';
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../contexts/AuthProvider';
 
 const Login = () => {
-  const { isAuth } = useContext(AuthContext);
+  const { isLogged, isAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuth) {
+    if (isLogged()) {
       navigate('/');
     }
-  }, [isAuth, navigate]);
+  }, [isAuth]);
 
   return (
     <div className="container-fluid h-100">

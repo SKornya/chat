@@ -11,6 +11,7 @@ import store from './store/store';
 import { addMessage } from './slices/messagesSlice';
 import { addChannel, removeChannel, renameChannel } from './slices/channelsSlice';
 import getChatApi from './chatApi';
+import AuthProvider from './contexts/AuthProvider';
 
 const Init = async () => {
   const socket = io();
@@ -65,7 +66,9 @@ const Init = async () => {
             chatApi,
           }}
           >
-            <App />
+            <AuthProvider>
+              <App />
+            </AuthProvider>
           </SocketContext.Provider>
         </Provider>
       </ErrorBoundary>

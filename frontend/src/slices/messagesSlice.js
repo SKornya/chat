@@ -3,7 +3,6 @@ import { removeChannel } from './channelsSlice';
 
 const messageAdapter = createEntityAdapter();
 
-// По умолчанию: { ids: [], entities: {} }
 const initialState = messageAdapter.getInitialState();
 
 export const messagesSlice = createSlice({

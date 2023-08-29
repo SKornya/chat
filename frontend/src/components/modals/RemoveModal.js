@@ -1,21 +1,19 @@
 import { Modal, Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useContext } from 'react';
-import SocketContext from '../../contexts/SocketContext';
+import useApi from '../../hooks/useApi';
 
 const RemoveModal = ({ hideModal, modalInfo }) => {
+  const { removeChannel } = useApi();
   const { t } = useTranslation();
 
-  const { chatApi } = useContext(SocketContext);
-
-  const removeChannel = async (channelId) => {
+  const removeChannelHandler = async (channelId) => {
     try {
-      await chatApi.removeChannel(channelId);
+      await removeChannel(channelId);
       hideModal();
       toast.warn(t('ui.toasts.remove'));
     } catch (e) {
-      toast.error('errors.error');
+      toast.error('errors.networkError');
     }
   };
 
@@ -34,7 +32,7 @@ const RemoveModal = ({ hideModal, modalInfo }) => {
           </Button>
           <Button
             variant="danger"
-            onClick={() => removeChannel(modalInfo.data.id)}
+            onClick={() => removeChannelHandler(modalInfo.data.id)}
           >
             {t('ui.modals.remove.submit')}
           </Button>

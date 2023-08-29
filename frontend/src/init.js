@@ -4,18 +4,39 @@ import filter from 'leo-profanity';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { Provider } from 'react-redux';
 import io from 'socket.io-client';
-import SocketContext from './contexts/SocketContext';
+import ApiContext from './contexts/ApiContext';
 import resources from './locales';
 import App from './components/App';
 import store from './store/store';
 import { addMessage } from './slices/messagesSlice';
 import { addChannel, removeChannel, renameChannel } from './slices/channelsSlice';
-import getChatApi from './chatApi';
-import AuthProvider from './contexts/AuthProvider';
+import { setCurrentChannelId } from './slices/channelSlice';
+import AuthProvider from './contexts/AuthContext';
 
 const Init = async () => {
   const socket = io();
-  const chatApi = getChatApi(socket);
+
+  const chatApi = {
+    newMessage: (body, channelId, user) => socket
+      .timeout(1000)
+      .emitWithAck('newMessage', {
+        body,
+        channelId,
+        user,
+      }),
+
+    addChannel: (name) => socket
+      .timeout(1000)
+      .emitWithAck('newChannel', { name }),
+
+    renameChannel: (id, name) => socket
+      .timeout(1000)
+      .emitWithAck('renameChannel', { id, name }),
+
+    removeChannel: (id) => socket
+      .timeout(1000)
+      .emitWithAck('removeChannel', { id }),
+  };
 
   const { dispatch } = store;
 
@@ -24,6 +45,7 @@ const Init = async () => {
   });
   socket.on('newChannel', (data) => {
     dispatch(addChannel(data));
+    dispatch(setCurrentChannelId(data.id));
   });
   socket.on('renameChannel', (data) => {
     dispatch(renameChannel({
@@ -62,14 +84,14 @@ const Init = async () => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
-          <SocketContext.Provider value={{
+          <ApiContext.Provider value={{
             chatApi,
           }}
           >
             <AuthProvider>
               <App />
             </AuthProvider>
-          </SocketContext.Provider>
+          </ApiContext.Provider>
         </Provider>
       </ErrorBoundary>
     </RollbarProvider>

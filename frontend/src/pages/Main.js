@@ -10,11 +10,12 @@ import { setDefaultChannelId } from '../slices/channelSlice';
 import Messages from '../components/Messages';
 import Channels from '../components/Channells';
 import routes from '../routes/routes';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const Main = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const user = JSON.parse(localStorage.getItem('user'));
+  const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Main = () => {
         dispatch(setMessages(data.messages));
         dispatch(setDefaultChannelId(data.currentChannelId));
       } catch (e) {
-        toast.error(t('errors.networkErr'));
+        toast.error(t('errors.networkError'));
       }
     };
     fetchData();

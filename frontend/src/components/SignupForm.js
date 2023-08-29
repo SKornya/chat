@@ -1,19 +1,16 @@
-import axios from 'axios';
 import { useFormik } from 'formik';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../contexts/AuthProvider';
-import routes from '../routes/routes';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { signup } = useAuthContext();
   const ref = useRef();
-
   const { t } = useTranslation();
 
   const formik = useFormik({
@@ -36,12 +33,11 @@ const SignupForm = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(routes.signupPath, {
+        const data = {
           username: values.username,
           password: values.password,
-        });
-        const userData = JSON.stringify(response.data);
-        login(userData);
+        };
+        await signup(data);
         navigate('/');
       } catch (e) {
         if (e.response.status !== 409) {

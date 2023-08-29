@@ -3,25 +3,19 @@ import {
 } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useContext, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
 import { channelsSelector } from '../../selectors/selectors';
-import SocketContext from '../../contexts/SocketContext';
-import { setCurrentChannelId } from '../../slices/channelSlice';
+import useApi from '../../hooks/useApi';
 
 const CreateModal = ({ hideModal }) => {
-  const { chatApi } = useContext(SocketContext);
-
+  const { addChannel } = useApi();
   const { t } = useTranslation();
-
-  const dispatch = useDispatch();
-
   const channelsNames = useSelector(channelsSelector)
     .map((c) => c.name);
-
   const ref = useRef();
 
   useEffect(() => {
@@ -41,13 +35,12 @@ const CreateModal = ({ hideModal }) => {
     }),
     onSubmit: async (values) => {
       try {
-        const { data } = await chatApi.addChannel(values.name);
-        const { id } = data;
-        dispatch(setCurrentChannelId(id));
+        const { name } = values;
+        await addChannel(name);
         hideModal();
         toast.success(t('ui.toasts.create'));
       } catch (e) {
-        toast.error(t('errors.error'));
+        toast.error(t('errors.networkError'));
       }
     },
     validateOnChange: false,

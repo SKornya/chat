@@ -1,17 +1,13 @@
-import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Button, FloatingLabel } from 'react-bootstrap';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../contexts/AuthProvider';
-import routes from '../routes/routes';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const LoginForm = () => {
   const { t } = useTranslation();
-
-  const { login } = useContext(AuthContext);
+  const { login } = useAuthContext();
 
   const formik = useFormik({
     initialValues: {
@@ -26,15 +22,14 @@ const LoginForm = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(routes.loginPath, {
+        const data = {
           username: values.username,
           password: values.password,
-        });
-        const userData = JSON.stringify(response.data);
-        login(userData);
+        };
+        await login(data);
       } catch (e) {
         if (e.response.status !== 401) {
-          toast.error(t('errors.networkErr'));
+          toast.error(t('errors.networkError'));
         }
         formik.errors.unauthorized = true;
       }

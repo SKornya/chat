@@ -79,8 +79,7 @@ const ru = {
         existingChannel: 'Должно быть уникальным',
         required: 'Обязательное поле',
       },
-      networkErr: 'Ошибка соединения',
-      error: 'Возникла ошибка',
+      networkError: 'Ошибка соединения',
     },
   },
 };

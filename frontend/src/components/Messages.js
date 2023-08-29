@@ -8,11 +8,9 @@ import { channelData, channelMessages, initialChannelId } from '../selectors/sel
 
 const Messages = () => {
   const { t } = useTranslation();
-
   const currentChannelId = useSelector(initialChannelId);
   const messages = useSelector(channelMessages(currentChannelId));
   const channel = useSelector(channelData(currentChannelId));
-
   const messagesEnd = useRef();
 
   useEffect(() => {

@@ -8,9 +8,7 @@ import { channelsSelector } from '../selectors/selectors';
 
 const Channels = () => {
   const { t } = useTranslation();
-
   const channels = useSelector(channelsSelector);
-
   const [modalInfo, setModalInfo] = useState({
     type: null,
     data: null,

@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+// import React from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { AuthContext } from '../contexts/AuthProvider';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const MyNavbar = () => {
-  const { isLogged, logout } = useContext(AuthContext);
-
+  const { logout, user } = useAuthContext();
   const { t } = useTranslation();
 
   return (
@@ -14,7 +13,7 @@ const MyNavbar = () => {
       <Container>
         <LinkContainer to="/"><Navbar.Brand>{t('ui.navbar.brand')}</Navbar.Brand></LinkContainer>
         {
-          isLogged() ? <Button onClick={logout}>{t('ui.navbar.logout')}</Button> : null
+          user ? <Button onClick={logout}>{t('ui.navbar.logout')}</Button> : null
         }
       </Container>
     </Navbar>

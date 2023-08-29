@@ -1,24 +1,22 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Button } from 'react-bootstrap';
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import SocketContext from '../contexts/SocketContext';
+import useApi from '../hooks/useApi';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const NewMessageForm = ({ currentChannelId }) => {
+  const { newMessage } = useApi();
   const { t } = useTranslation();
-
-  const { chatApi } = useContext(SocketContext);
-
+  const { user } = useAuthContext();
   const ref = useRef();
 
   useEffect(() => {
     ref.current.value = '';
     ref.current.focus();
   }, [currentChannelId]);
-
-  const user = JSON.parse(localStorage.getItem('user'));
 
   const formik = useFormik({
     initialValues: {
@@ -30,14 +28,14 @@ const NewMessageForm = ({ currentChannelId }) => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const { message } = values;
-        await chatApi.newMessage(message, currentChannelId, user.username);
+        await newMessage(message, currentChannelId, user.username);
         setSubmitting(false);
         formik.values.message = '';
         setTimeout(() => {
           ref.current.focus();
         });
       } catch (e) {
-        toast.error(t('errors.error'));
+        toast.error(t('errors.networkError'));
       }
     },
   });

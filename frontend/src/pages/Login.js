@@ -1,20 +1,20 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MyCard from '../components/Card/MyCard';
 import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
 import Footer from '../components/Card/CardFooter';
-import { AuthContext } from '../contexts/AuthProvider';
+import { useAuthContext } from '../contexts/AuthContext';
 
 const Login = () => {
-  const { isLogged, isAuth } = useContext(AuthContext);
+  const { user } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLogged()) {
+    if (user) {
       navigate('/');
     }
-  }, [isAuth]);
+  }, [user]);
 
   return (
     <div className="container-fluid h-100">

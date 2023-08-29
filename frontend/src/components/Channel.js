@@ -11,7 +11,6 @@ import { initialChannelId } from '../selectors/selectors';
 
 const Channel = ({ channel }) => {
   const { t } = useTranslation();
-
   const dispatch = useDispatch();
   const currentId = useSelector(initialChannelId);
 

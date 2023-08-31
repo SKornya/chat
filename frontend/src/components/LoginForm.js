@@ -1,9 +1,11 @@
+import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Form, Button, FloatingLabel } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../contexts/AuthContext';
+import routes from '../routes/routes';
 
 const LoginForm = () => {
   const { t } = useTranslation();
@@ -21,19 +23,22 @@ const LoginForm = () => {
         .required(t('errors.login.emptyFields')),
     }),
     onSubmit: async (values) => {
+      const { username, password } = values;
       try {
-        const data = {
-          username: values.username,
-          password: values.password,
-        };
-        await login(data);
+        const { data } = await axios.post(routes.loginPath, { username, password });
+        login(data);
       } catch (e) {
-        if (e.response.status !== 401) {
-          toast.error(t('errors.networkError'));
+        if (!e.isAxiosError) {
+          toast.error(t('errors.error'));
+        } else if (e.response.status === 401) {
+          formik.setFieldError('password', 'unauthorized');
+          return;
         }
-        formik.errors.unauthorized = true;
+        toast.error(t('errors.networkError'));
       }
     },
+    validateOnChange: false,
+    validateOnBlur: false,
   });
 
   return (
@@ -51,7 +56,7 @@ const LoginForm = () => {
             placeholder={t('ui.login.username')}
             value={formik.values.username}
             onChange={formik.handleChange}
-            isInvalid={formik.errors.unauthorized}
+            isInvalid={formik.errors.password}
             autoFocus
           />
         </FloatingLabel>
@@ -68,7 +73,7 @@ const LoginForm = () => {
             placeholder={t('ui.login.password')}
             value={formik.values.password}
             onChange={formik.handleChange}
-            isInvalid={formik.errors.unauthorized}
+            isInvalid={formik.errors.password}
             required
           />
           <Form.Control.Feedback type="invalid" tooltip>

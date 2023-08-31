@@ -84,10 +84,7 @@ const Init = async () => {
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
         <Provider store={store}>
-          <ApiContext.Provider value={{
-            chatApi,
-          }}
-          >
+          <ApiContext.Provider value={chatApi}>
             <AuthProvider>
               <App />
             </AuthProvider>

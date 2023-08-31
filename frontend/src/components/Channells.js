@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux';
 import { Button, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { renderModal } from './modals/index';
 import Channel from './Channel';
 import { channelsSelector } from '../selectors/selectors';

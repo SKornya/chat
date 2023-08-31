@@ -1,19 +1,9 @@
-import axios from 'axios';
-import routes from '../routes/routes';
 import useLocalStorage from './useLocalStorage';
 
 const useAuth = () => {
   const [user, setUser] = useLocalStorage('user');
 
-  const signup = async (data) => {
-    const response = await axios.post(routes.signupPath, data);
-    const userData = response.data;
-    setUser(userData);
-  };
-
-  const login = async (data) => {
-    const response = await axios.post(routes.loginPath, data);
-    const userData = response.data;
+  const login = async (userData) => {
     setUser(userData);
   };
 
@@ -22,7 +12,6 @@ const useAuth = () => {
   return ({
     user,
     login,
-    signup,
     logout,
   });
 };

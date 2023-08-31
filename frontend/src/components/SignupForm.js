@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRef } from 'react';
 import { Form, FloatingLabel, Button } from 'react-bootstrap';
@@ -6,10 +7,11 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../contexts/AuthContext';
+import routes from '../routes/routes';
 
 const SignupForm = () => {
   const navigate = useNavigate();
-  const { signup } = useAuthContext();
+  const { login } = useAuthContext();
   const ref = useRef();
   const { t } = useTranslation();
 
@@ -32,18 +34,19 @@ const SignupForm = () => {
         .required(t('errors.signup.required')),
     }),
     onSubmit: async (values) => {
+      const { username, password } = values;
       try {
-        const data = {
-          username: values.username,
-          password: values.password,
-        };
-        await signup(data);
+        const { data } = await axios.post(routes.loginPath, { username, password });
+        login(data);
         navigate('/');
       } catch (e) {
-        if (e.response.status !== 409) {
-          toast.error(t('errors.networkErr'));
+        if (!e.isAxiosError) {
+          toast.error(t('errors.error'));
+        } else if (e.response.status === 409) {
+          formik.setFieldError('username', 'existingUser');
+          return;
         }
-        formik.errors.existingUser = true;
+        toast.error(t('errors.networkError'));
       }
     },
     validateOnChange: false,
@@ -80,11 +83,13 @@ const SignupForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             ref={ref}
-            isInvalid={!!formik.errors.username || formik.errors.existingUser}
+            isInvalid={!!formik.errors.username}
             autoFocus
           />
           <Form.Control.Feedback type="invalid" tooltip>
-            {formik.errors.username || t('errors.signup.existingUser')}
+            {formik.errors.username === 'existingUser'
+              ? t('errors.signup.existingUser')
+              : formik.errors.username}
           </Form.Control.Feedback>
         </FloatingLabel>
       </Form.Group>

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import ApiContext from '../contexts/ApiContext';
 
 const useApi = () => {
-  const { chatApi } = useContext(ApiContext);
+  const chatApi = useContext(ApiContext);
   return chatApi;
 };
 

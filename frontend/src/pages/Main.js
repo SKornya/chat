@@ -15,7 +15,7 @@ import { useAuthContext } from '../contexts/AuthContext';
 const Main = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,6 +31,12 @@ const Main = () => {
         dispatch(setMessages(data.messages));
         dispatch(setDefaultChannelId(data.currentChannelId));
       } catch (e) {
+        if (!e.isAxiosError) {
+          toast.error(t('errors.error'));
+        } else if (e.response.status === 401) {
+          logout();
+          return;
+        }
         toast.error(t('errors.networkError'));
       }
     };

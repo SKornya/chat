@@ -8,14 +8,13 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
-import { channelsSelector } from '../../selectors/selectors';
+import { channelsNamesSelector } from '../../selectors/selectors';
 import useApi from '../../hooks/useApi';
 
 const CreateModal = ({ hideModal }) => {
   const { addChannel } = useApi();
   const { t } = useTranslation();
-  const channelsNames = useSelector(channelsSelector)
-    .map((c) => c.name);
+  const channelsNames = useSelector(channelsNamesSelector);
   const ref = useRef();
 
   useEffect(() => {

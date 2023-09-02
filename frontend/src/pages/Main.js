@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { setMessages } from '../slices/messagesSlice';
 import { setChannels } from '../slices/channelsSlice';
-import { setDefaultChannelId } from '../slices/channelSlice';
+import { setCurrentChannelId } from '../slices/channelSlice';
 import Messages from '../components/Messages';
 import Channels from '../components/Channells';
 import routes from '../routes/routes';
@@ -21,7 +21,7 @@ const Main = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(routes.initialDataPath, {
+        const response = await axios.get(routes.api.initialDataPath, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -29,11 +29,13 @@ const Main = () => {
         const { data } = response;
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
-        dispatch(setDefaultChannelId(data.currentChannelId));
+        dispatch(setCurrentChannelId(data.currentChannelId));
       } catch (e) {
         if (!e.isAxiosError) {
           toast.error(t('errors.error'));
-        } else if (e.response.status === 401) {
+          return;
+        }
+        if (e.response.status === 401) {
           logout();
           return;
         }

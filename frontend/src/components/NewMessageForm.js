@@ -4,6 +4,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import filter from 'leo-profanity';
 import useApi from '../hooks/useApi';
 import { useAuthContext } from '../contexts/AuthContext';
 
@@ -14,7 +15,6 @@ const NewMessageForm = ({ currentChannelId }) => {
   const ref = useRef();
 
   useEffect(() => {
-    ref.current.value = '';
     ref.current.focus();
   }, [currentChannelId]);
 
@@ -25,15 +25,14 @@ const NewMessageForm = ({ currentChannelId }) => {
     validationSchema: Yup.object({
       message: Yup.string().required(),
     }),
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values) => {
       try {
         const { message } = values;
-        await newMessage(message, currentChannelId, user.username);
-        setSubmitting(false);
-        formik.values.message = '';
+        await newMessage(filter.clean(message), currentChannelId, user.username);
         setTimeout(() => {
           ref.current.focus();
         });
+        formik.resetForm();
       } catch (e) {
         toast.error(t('errors.networkError'));
       }

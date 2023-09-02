@@ -5,6 +5,7 @@ import logo from '../assets/logoIn.jpeg';
 import LoginForm from '../components/LoginForm';
 import Footer from '../components/Card/CardFooter';
 import { useAuthContext } from '../contexts/AuthContext';
+import routes from '../routes/routes';
 
 const Login = () => {
   const { user } = useAuthContext();
@@ -12,7 +13,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate(routes.pages.main);
     }
   }, [user]);
 

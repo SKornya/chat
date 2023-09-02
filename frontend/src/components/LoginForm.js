@@ -25,12 +25,14 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       const { username, password } = values;
       try {
-        const { data } = await axios.post(routes.loginPath, { username, password });
+        const { data } = await axios.post(routes.api.loginPath, { username, password });
         login(data);
       } catch (e) {
         if (!e.isAxiosError) {
           toast.error(t('errors.error'));
-        } else if (e.response.status === 401) {
+          return;
+        }
+        if (e.response.status === 401) {
           formik.setFieldError('password', 'unauthorized');
           return;
         }
@@ -85,7 +87,7 @@ const LoginForm = () => {
         type="submit"
         variant="outline-primary"
         className="w-100"
-        disabled={!(!!formik.values.username && !!formik.values.password)}
+        disabled={!!formik.isSubmitting}
       >
         {t('ui.login.submit')}
       </Button>

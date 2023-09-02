@@ -4,14 +4,17 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useApi from '../../hooks/useApi';
+import { hideModal } from '../../slices/modalsSlice';
 
-const RenameModal = ({ hideModal, modalInfo }) => {
+const RenameModal = ({ modalInfo }) => {
   const { renameChannel } = useApi();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
   const channels = useSelector((state) => Object
     .values(state.channels.entities))
     .map((c) => c.name);
@@ -37,16 +40,16 @@ const RenameModal = ({ hideModal, modalInfo }) => {
         const { id } = modalInfo.data;
         const { name } = values;
         await renameChannel(id, name);
-        hideModal();
+        dispatch(hideModal());
         toast.warn(t('ui.toasts.rename'));
       } catch (e) {
-        toast.error('errors.networkError');
+        toast.error(t('errors.networkError'));
       }
     },
   });
 
   return (
-    <Modal show onHide={hideModal} centered>
+    <Modal show onHide={() => dispatch(hideModal())} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('ui.modals.rename.header')}</Modal.Title>
       </Modal.Header>
@@ -69,7 +72,7 @@ const RenameModal = ({ hideModal, modalInfo }) => {
             </Form.Control.Feedback>
           </Form.Group>
           <Container className="d-flex justify-content-end p-0">
-            <Button variant="secondary" onClick={hideModal} className="me-1">
+            <Button variant="secondary" onClick={() => dispatch(hideModal())} className="me-1">
               {t('ui.modals.cancel')}
             </Button>
             <Button

@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { setMessages } from '../slices/messagesSlice';
 import { setChannels } from '../slices/channelsSlice';
-import { setDefaultChannelId } from '../slices/channelSlice';
+import { setCurrentChannelId } from '../slices/channelSlice';
 import Messages from '../components/Messages';
 import Channels from '../components/Channells';
 import routes from '../routes/routes';
 import { useAuthContext } from '../contexts/AuthContext';
+import Modal from '../components/modals/Modal';
 
 const Main = () => {
   const { t } = useTranslation();
@@ -18,10 +19,12 @@ const Main = () => {
   const { user, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
+  const modalInfo = useSelector((state) => state.modals.info);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(routes.initialDataPath, {
+        const response = await axios.get(routes.api.initialDataPath, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -29,11 +32,13 @@ const Main = () => {
         const { data } = response;
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
-        dispatch(setDefaultChannelId(data.currentChannelId));
+        dispatch(setCurrentChannelId(data.currentChannelId));
       } catch (e) {
         if (!e.isAxiosError) {
           toast.error(t('errors.error'));
-        } else if (e.response.status === 401) {
+          return;
+        }
+        if (e.response.status === 401) {
           logout();
           return;
         }
@@ -52,6 +57,7 @@ const Main = () => {
           <Messages />
         </Row>
         <ToastContainer />
+        {modalInfo.type && <Modal modalInfo={modalInfo} />}
       </Container>
     )
     : (

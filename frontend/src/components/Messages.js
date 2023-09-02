@@ -15,7 +15,9 @@ const Messages = () => {
 
   useEffect(() => {
     if (messagesEnd.current) {
-      messagesEnd.current.scrollIntoView();
+      messagesEnd.current.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
   }, [messages]);
 

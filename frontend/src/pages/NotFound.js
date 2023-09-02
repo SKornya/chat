@@ -1,6 +1,7 @@
 import { LinkContainer } from 'react-router-bootstrap';
 import { useTranslation } from 'react-i18next';
 import logo from '../assets/notFound.svg';
+import routes from '../routes/routes';
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const NotFound = () => {
       <p className="text-muted">
         {t('ui.notFoundPage.suggestion')}
         <LinkContainer
-          to="/"
+          to={routes.pages.main}
           style={{
             cursor: 'pointer',
             textDecoration: 'underline',

@@ -4,18 +4,20 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
 import { channelsNamesSelector } from '../../selectors/selectors';
 import useApi from '../../hooks/useApi';
+import { hideModal } from '../../slices/modalsSlice';
 
-const CreateModal = ({ hideModal }) => {
+const CreateModal = () => {
   const { addChannel } = useApi();
   const { t } = useTranslation();
   const channelsNames = useSelector(channelsNamesSelector);
   const ref = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     ref.current.focus();
@@ -36,7 +38,7 @@ const CreateModal = ({ hideModal }) => {
       try {
         const { name } = values;
         await addChannel(name);
-        hideModal();
+        dispatch(hideModal());
         toast.success(t('ui.toasts.create'));
       } catch (e) {
         toast.error(t('errors.networkError'));
@@ -47,7 +49,7 @@ const CreateModal = ({ hideModal }) => {
   });
 
   return (
-    <Modal show onHide={hideModal} centered>
+    <Modal show onHide={() => dispatch(hideModal())} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('ui.modals.create.header')}</Modal.Title>
       </Modal.Header>
@@ -70,7 +72,7 @@ const CreateModal = ({ hideModal }) => {
             </Form.Control.Feedback>
           </Form.Group>
           <Container className="d-flex justify-content-end p-0">
-            <Button variant="secondary" onClick={hideModal} className="me-1">
+            <Button variant="secondary" onClick={() => dispatch(hideModal())} className="me-1">
               {t('ui.modals.cancel')}
             </Button>
             <Button

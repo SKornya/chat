@@ -8,13 +8,15 @@ const modals = {
   remove: RemoveModal,
 };
 
-export const getModal = (modalName) => modals[modalName];
+const getModal = (modalName) => modals[modalName];
 
-export const renderModal = ({ modalInfo, hideModal }) => {
+const Modal = ({ modalInfo }) => {
   if (!modalInfo.type) {
     return null;
   }
 
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} hideModal={hideModal} />;
+  return <Component modalInfo={modalInfo} />;
 };
+
+export default Modal;

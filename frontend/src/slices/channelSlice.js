@@ -4,17 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { removeChannel } from './channelsSlice';
 
 const initialState = {
-  defaultChannelId: null,
-  currentChannelId: null,
+  currentChannelId: 1,
 };
 
 const channelSlice = createSlice({
   name: 'channel',
   initialState,
   reducers: {
-    setDefaultChannelId: (state, action) => {
-      state.defaultChannelId = action.payload;
-    },
     setCurrentChannelId: (state, action) => {
       state.currentChannelId = action.payload;
     },
@@ -24,11 +20,11 @@ const channelSlice = createSlice({
       .addCase(removeChannel, (state, action) => {
         const id = action.payload;
         if (id === state.currentChannelId) {
-          state.currentChannelId = null;
+          state.currentChannelId = 1;
         }
       });
   },
 });
 
-export const { setDefaultChannelId, setCurrentChannelId } = channelSlice.actions;
+export const { setCurrentChannelId } = channelSlice.actions;
 export default channelSlice.reducer;

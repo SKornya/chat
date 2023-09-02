@@ -6,15 +6,16 @@ import MyNavbar from './MyNavbar';
 import NotFound from '../pages/NotFound';
 import Main from '../pages/Main';
 import AuthComponent from './AuthComponent';
+import routes from '../routes/routes';
 
 const App = () => (
   <BrowserRouter>
     <div className="d-flex flex-column h-100">
       <MyNavbar />
       <Routes>
-        <Route path="/" element={<AuthComponent><Main /></AuthComponent>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path={routes.pages.main} element={<AuthComponent><Main /></AuthComponent>} />
+        <Route path={routes.pages.login} element={<Login />} />
+        <Route path={routes.pages.signup} element={<Signup />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

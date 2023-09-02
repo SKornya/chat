@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { LinkContainer } from 'react-router-bootstrap';
+import routes from '../../routes/routes';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -10,7 +11,7 @@ const Footer = () => {
         {t('ui.login.question')}
         {' '}
         <LinkContainer
-          to="/signup"
+          to={routes.pages.signup}
           style={{ color: '#0d6efd', cursor: 'pointer' }}
         >
           <span>{t('ui.login.toSignup')}</span>

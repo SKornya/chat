@@ -36,13 +36,15 @@ const SignupForm = () => {
     onSubmit: async (values) => {
       const { username, password } = values;
       try {
-        const { data } = await axios.post(routes.loginPath, { username, password });
+        const { data } = await axios.post(routes.api.loginPath, { username, password });
         login(data);
-        navigate('/');
+        navigate(routes.pages.main);
       } catch (e) {
         if (!e.isAxiosError) {
           toast.error(t('errors.error'));
-        } else if (e.response.status === 409) {
+          return;
+        }
+        if (e.response.status === 409) {
           formik.setFieldError('username', 'existingUser');
           return;
         }

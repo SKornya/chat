@@ -12,12 +12,9 @@ const channelsNamesSelector = createSelector(
 
 const messagesSelector = (state) => Object.values(state.channels.entities);
 
-const defaultChannelIdSelector = (state) => state.channel.defaultChannelId;
-
 const currentChannelIdSelector = (state) => state.channel.currentChannelId;
 
-const initialChannelId = (state) => state.channel.currentChannelId
-  || state.channel.defaultChannelId;
+const initialChannelId = (state) => state.channel.currentChannelId;
 
 const channelData = (channelId) => (state) => state.channels.entities[channelId];
 
@@ -30,7 +27,6 @@ export {
   channelsSelector,
   channelsNamesSelector,
   messagesSelector,
-  defaultChannelIdSelector,
   currentChannelIdSelector,
   initialChannelId,
   channelData,

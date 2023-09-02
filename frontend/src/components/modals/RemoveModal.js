@@ -1,24 +1,27 @@
 import { Modal, Button, Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 import useApi from '../../hooks/useApi';
+import { hideModal } from '../../slices/modalsSlice';
 
-const RemoveModal = ({ hideModal, modalInfo }) => {
+const RemoveModal = ({ modalInfo }) => {
   const { removeChannel } = useApi();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const removeChannelHandler = async (channelId) => {
     try {
       await removeChannel(channelId);
-      hideModal();
+      dispatch(hideModal());
       toast.warn(t('ui.toasts.remove'));
     } catch (e) {
-      toast.error('errors.networkError');
+      toast.error(t('errors.networkError'));
     }
   };
 
   return (
-    <Modal show onHide={hideModal} centered>
+    <Modal show onHide={() => dispatch(hideModal())} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('ui.modals.remove.header')}</Modal.Title>
       </Modal.Header>
@@ -27,7 +30,7 @@ const RemoveModal = ({ hideModal, modalInfo }) => {
           {t('ui.modals.remove.body')}
         </p>
         <Container className="d-flex justify-content-end p-0">
-          <Button variant="secondary" onClick={hideModal} className="me-1">
+          <Button variant="secondary" onClick={() => dispatch(hideModal())} className="me-1">
             {t('ui.modals.cancel')}
           </Button>
           <Button

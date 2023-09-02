@@ -1,28 +1,17 @@
 import { Button, Col } from 'react-bootstrap';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { renderModal } from './modals/index';
 import Channel from './Channel';
 import { channelsSelector } from '../selectors/selectors';
+import { showModal } from '../slices/modalsSlice';
 
 const Channels = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
   const channels = useSelector(channelsSelector);
-  const [modalInfo, setModalInfo] = useState({
-    type: null,
-    data: null,
-  });
-
-  const hideModal = () => setModalInfo({
-    type: null,
-    data: null,
-  });
-
-  const showModal = (type, data = null) => setModalInfo({
-    type,
-    data,
-  });
+  const modalInfo = useSelector((state) => state.modals.info);
 
   return (
     <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -31,7 +20,7 @@ const Channels = () => {
         <Button
           variant="group-vertical"
           className="p-0 text-primary"
-          onClick={() => showModal('create')}
+          onClick={() => dispatch(showModal({ type: 'create' }))}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,8 +36,6 @@ const Channels = () => {
         </Button>
       </Col>
 
-      {renderModal({ modalInfo, hideModal })}
-
       <ul
         id="channels-box"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
@@ -60,6 +47,8 @@ const Channels = () => {
           />
         ))}
       </ul>
+
+      {modalInfo.type ? renderModal({ modalInfo }) : null}
     </Col>
   );
 };

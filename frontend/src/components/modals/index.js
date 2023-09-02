@@ -10,11 +10,12 @@ const modals = {
 
 export const getModal = (modalName) => modals[modalName];
 
-export const renderModal = ({ modalInfo, hideModal }) => {
+export const renderModal = ({ modalInfo }) => {
+  console.log('render func');
   if (!modalInfo.type) {
     return null;
   }
 
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} hideModal={hideModal} />;
+  return <Component modalInfo={modalInfo} />;
 };

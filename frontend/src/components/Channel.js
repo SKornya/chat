@@ -2,32 +2,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button, ButtonGroup, Dropdown, DropdownButton,
 } from 'react-bootstrap';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import { setCurrentChannelId } from '../slices/channelSlice';
 import { renderModal } from './modals/index';
 import { initialChannelId } from '../selectors/selectors';
+import { showModal } from '../slices/modalsSlice';
 
 const Channel = ({ channel }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const currentId = useSelector(initialChannelId);
-
-  const [modalInfo, setModalInfo] = useState({
-    type: null,
-    data: null,
-  });
-
-  const hideModal = () => setModalInfo({
-    type: null,
-    data: null,
-  });
-
-  const showModal = (type, data = null) => setModalInfo({
-    type,
-    data,
-  });
+  const modalInfo = useSelector((state) => state.modals.info);
 
   return (
     <li className="nav-item w-100">
@@ -58,20 +45,21 @@ const Channel = ({ channel }) => {
             <span className="visually-hidden">{t('ui.channels.channelControl')}</span>
             <Dropdown.Item
               eventKey="1"
-              onClick={() => showModal('remove', channel)}
+              onClick={() => dispatch(showModal({ type: 'remove', data: channel }))}
             >
               {t('ui.dropdown.remove')}
             </Dropdown.Item>
             <Dropdown.Item
               eventKey="2"
-              onClick={() => showModal('rename', channel)}
+              onClick={() => dispatch(showModal({ type: 'rename', data: channel }))}
             >
               {t('ui.dropdown.rename')}
             </Dropdown.Item>
           </DropdownButton>
         ) : null}
       </ButtonGroup>
-      {renderModal({ modalInfo, hideModal })}
+
+      {modalInfo.type && renderModal({ modalInfo })}
     </li>
   );
 };

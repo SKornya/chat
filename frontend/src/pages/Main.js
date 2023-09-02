@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { setMessages } from '../slices/messagesSlice';
@@ -11,12 +11,15 @@ import Messages from '../components/Messages';
 import Channels from '../components/Channells';
 import routes from '../routes/routes';
 import { useAuthContext } from '../contexts/AuthContext';
+import Modal from '../components/modals/Modal';
 
 const Main = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { user, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
+
+  const modalInfo = useSelector((state) => state.modals.info);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +57,7 @@ const Main = () => {
           <Messages />
         </Row>
         <ToastContainer />
+        {modalInfo.type && <Modal modalInfo={modalInfo} />}
       </Container>
     )
     : (

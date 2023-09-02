@@ -1,7 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { renderModal } from './modals/index';
 import Channel from './Channel';
 import { channelsSelector } from '../selectors/selectors';
 import { showModal } from '../slices/modalsSlice';
@@ -10,8 +10,16 @@ const Channels = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const channelsEnd = useRef();
   const channels = useSelector(channelsSelector);
-  const modalInfo = useSelector((state) => state.modals.info);
+
+  useEffect(() => {
+    if (channelsEnd.current) {
+      channelsEnd.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [channels]);
 
   return (
     <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -46,9 +54,8 @@ const Channels = () => {
             channel={channel}
           />
         ))}
+        <div ref={channelsEnd} />
       </ul>
-
-      {modalInfo.type ? renderModal({ modalInfo }) : null}
     </Col>
   );
 };

@@ -2,11 +2,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button, ButtonGroup, Dropdown, DropdownButton,
 } from 'react-bootstrap';
-// import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import { setCurrentChannelId } from '../slices/channelSlice';
-import { renderModal } from './modals/index';
 import { initialChannelId } from '../selectors/selectors';
 import { showModal } from '../slices/modalsSlice';
 
@@ -14,7 +12,6 @@ const Channel = ({ channel }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const currentId = useSelector(initialChannelId);
-  const modalInfo = useSelector((state) => state.modals.info);
 
   return (
     <li className="nav-item w-100">
@@ -58,8 +55,6 @@ const Channel = ({ channel }) => {
           </DropdownButton>
         ) : null}
       </ButtonGroup>
-
-      {modalInfo.type && renderModal({ modalInfo })}
     </li>
   );
 };

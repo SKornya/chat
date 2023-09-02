@@ -8,10 +8,9 @@ const modals = {
   remove: RemoveModal,
 };
 
-export const getModal = (modalName) => modals[modalName];
+const getModal = (modalName) => modals[modalName];
 
-export const renderModal = ({ modalInfo }) => {
-  console.log('render func');
+const Modal = ({ modalInfo }) => {
   if (!modalInfo.type) {
     return null;
   }
@@ -19,3 +18,5 @@ export const renderModal = ({ modalInfo }) => {
   const Component = getModal(modalInfo.type);
   return <Component modalInfo={modalInfo} />;
 };
+
+export default Modal;

@@ -15,6 +15,7 @@ import AuthProvider from './contexts/AuthContext';
 
 const Init = async () => {
   const socket = io();
+  const { dispatch } = store;
 
   const chatApi = {
     newMessage: (body, channelId, user) => socket
@@ -27,7 +28,11 @@ const Init = async () => {
 
     addChannel: (name) => socket
       .timeout(1000)
-      .emitWithAck('newChannel', { name }),
+      .emitWithAck('newChannel', { name })
+      .then(({ data }) => {
+        console.log(data);
+        dispatch(setCurrentChannelId(data.id));
+      }),
 
     renameChannel: (id, name) => socket
       .timeout(1000)
@@ -38,14 +43,11 @@ const Init = async () => {
       .emitWithAck('removeChannel', { id }),
   };
 
-  const { dispatch } = store;
-
   socket.on('newMessage', (data) => {
     dispatch(addMessage(data));
   });
   socket.on('newChannel', (data) => {
     dispatch(addChannel(data));
-    dispatch(setCurrentChannelId(data.id));
   });
   socket.on('renameChannel', (data) => {
     dispatch(renameChannel({

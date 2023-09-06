@@ -30,8 +30,8 @@ const RenameModal = ({ modalInfo }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .min(3, t('errors.modal.shortName'))
-        .max(20, t('errors.modal.longName'))
+        .min(3, t('errors.modal.wrongLength'))
+        .max(20, t('errors.modal.wrongLength'))
         .notOneOf(channels, t('errors.modal.existingChannel'))
         .required(t('errors.modal.required')),
     }),
